@@ -13,6 +13,7 @@ class Scene;
 struct Triangle;
 class Texture;
 class Camera;
+class IShader;
 
 class Renderer
 {
@@ -29,8 +30,7 @@ private:
 
 	void DrawLine(Vector2i p0, Vector2i p1);
 	void DrawTriangle(const Triangle& triangle);
-	void ScanlineClean(const Triangle& triangle, Texture* texture, float intensity);
-	void ScanlineClean(const Triangle& triangle, Texture* texture, const Vector3f& lightDir);
+	void ScanlineClean(IShader& shader, Vector3f* vertices, const Triangle& triangle);
 	void ScanlineFast(Triangle triangle, float intensity);
 
 	void SetZBuffer(int x, int y, float depth);

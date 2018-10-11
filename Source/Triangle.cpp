@@ -49,12 +49,17 @@ std::vector<Vector3f> Triangle::GetNormals() const
 	return normals;
 }
 
-void Triangle::Barycentric(const Triangle& triangle, const Vector3f& P, float& u, float& v, float& w)
+int Triangle::Size() 
+{
+	return 3;
+}
+
+void Triangle::Barycentric(Vector3f* vertices, const Vector3f& P, float& u, float& v, float& w)
 {
 	// Dont know why without dot(n) not working
-	Vector3f a = triangle[0];
-	Vector3f b = triangle[1];
-	Vector3f c = triangle[2];
+	Vector3f a = vertices[0];
+	Vector3f b = vertices[1];
+	Vector3f c = vertices[2];
 	Vector3f normal = Cross(b - a, c - a);
 
 	float areaABC = normal.LengthSquared();
@@ -85,14 +90,14 @@ void Triangle::Sort(Triangle& triangle)
 }
 
 //Multiply
-Triangle operator*(const Matrix4f& M, const Triangle& triangle) 
-{
-	Triangle transform = triangle;
-	transform[0] = (M * Vector4f(triangle[0], 1.0f)).DivideW();
-	transform[1] = (M * Vector4f(triangle[1], 1.0f)).DivideW();
-	transform[2] = (M * Vector4f(triangle[2], 1.0f)).DivideW();
-
-	return transform;
-}
+//Triangle operator*(const Matrix4f& M, const Triangle& triangle) 
+//{
+//	Triangle transform = triangle;
+//	transform[0] = (M * Vector4f(triangle[0], 1.0f)).DivideW();
+//	transform[1] = (M * Vector4f(triangle[1], 1.0f)).DivideW();
+//	transform[2] = (M * Vector4f(triangle[2], 1.0f)).DivideW();
+//
+//	return transform;
+//}
 
 #pragma endregion

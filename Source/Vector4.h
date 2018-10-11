@@ -20,7 +20,7 @@ struct Vec4
 	Vec4<T>& operator=(const Vec4<T>& other);
 
 	Vec3<T> GetVec3() const;
-	Vec3<T> DivideW() const;
+	Vec4<T> DivideW() const;
 
 	Vec4<T> operator-() const;
 
@@ -90,10 +90,11 @@ Vec3<T> Vec4<T>::GetVec3() const
 }
 
 template <class T>
-Vec3<T> Vec4<T>::DivideW() const
+Vec4<T> Vec4<T>::DivideW() const
 {
-	assert(w != 0 && "Divide w is zero\n");
-	return Vec3<T>(x / w, y / w, z / w);
+	assert(abs(w) > 10e-5 && "Divide w is zero\n");
+	float invW = 1.0f / w;
+	return Vec4<T>(x * invW, y * invW, z * invW, 1.0f);
 }
 
 template <class T>

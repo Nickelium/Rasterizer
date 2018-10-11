@@ -128,6 +128,7 @@
     <ClCompile Include="Source\Object.cpp" />
     <ClCompile Include="Source\Renderer.cpp" />
     <ClCompile Include="Source\Scene.cpp" />
+    <ClCompile Include="Source\Shaders.cpp" />
     <ClCompile Include="Source\Timer.cpp" />
     <ClCompile Include="Source\Triangle.cpp" />
     <ClCompile Include="Source\Window.cpp" />
@@ -141,6 +142,7 @@
     <ClInclude Include="Source\Application.h" />
     <ClInclude Include="Source\Color.h" />
     <ClInclude Include="Source\Image.h" />
+    <ClInclude Include="Source\IShader.h" />
     <ClInclude Include="Source\Maths.h" />
     <ClInclude Include="Source\Matrix3.h" />
     <ClInclude Include="Source\Matrix4.h" />
@@ -148,6 +150,7 @@
     <ClInclude Include="Source\Object.h" />
     <ClInclude Include="Source\Renderer.h" />
     <ClInclude Include="Source\Scene.h" />
+    <ClInclude Include="Source\Shaders.h" />
     <ClInclude Include="Source\Timer.h" />
     <ClInclude Include="Source\Triangle.h" />
     <ClInclude Include="Source\Vector2.h" />

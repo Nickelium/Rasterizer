@@ -18,7 +18,9 @@ public:
 	std::vector<Vector2f> GetUVs() const;
 	std::vector<Vector3f> GetNormals() const;
 
-	static void Barycentric(const Triangle& triangle, const Vector3f& P, float& u, float& v, float& w);
+	static int Size();
+
+	static void Barycentric(Vector3f* vertices, const Vector3f& P, float& u, float& v, float& w);
 	static void Sort(Triangle& triangle);
 private:
 	std::vector<Vector3f> vertices;
@@ -26,4 +28,4 @@ private:
 	std::vector<Vector3f> normals;
 };
 
-Triangle operator*(const Matrix4f& M, const Triangle& triangle);
+//Triangle operator*(const Matrix4f& M, const Triangle& triangle);

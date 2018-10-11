@@ -24,8 +24,9 @@ Color Texture::GetColor(float u, float v) const
 		0.0f <= v && v <= 1.0f && "Sample from invalid UV\n");
 	int x = int(std::round(u * width));
 	int y = height - int (std::round(v * height));
+	float invMaxValue = 1.0f / 255.0f;
 	return Color(
-		image[(x + y * width) * comp + 0],
-		image[(x + y * width) * comp + 1],
-		image[(x + y * width) * comp + 2]);
+		invMaxValue * image[(x + y * width) * comp + 0],
+		invMaxValue * image[(x + y * width) * comp + 1],
+		invMaxValue * image[(x + y * width) * comp + 2]);
 }

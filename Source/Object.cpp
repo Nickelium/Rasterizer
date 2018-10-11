@@ -15,7 +15,8 @@ Object::Object(const char* fileName, const char* textureName)
 Object::Object(Object&& other)
 	: mesh(other.mesh),
 	texture(other.texture),
-	transform(std::move(other.transform))
+	transform(std::move(other.transform)),
+	material(other.material)
 {
 	other.mesh = nullptr;
 	other.texture = nullptr;
@@ -37,9 +38,19 @@ Texture* Object::GetTexture() const
 	return texture;
 }
 
+Material Object::GetMaterial() const
+{
+	return material;
+}
+
 Transform Object::GetTransform() const
 {
 	return transform;
+}
+
+void Object::SetMaterial(const Material& material)
+{
+	this->material = material;
 }
 
 void Object::SetTransform(const Transform& transform)

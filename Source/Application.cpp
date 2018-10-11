@@ -29,8 +29,9 @@ void Application::Update(Scene& scene, Camera& camera)
 	for (Object& object : scene.GetObjects())
 	{
 		//object.Move(Vector3f(0.001f));
-		object.Rotate(Vector3f(0.f, 0.75f, 0.f));
-		camera.Move(Vector3f(0.0f, 0.0f, +0.005f));
+		object.Rotate(Vector3f(0.f, 1.15f, 0.f));
+		camera.Move(Vector3f(0.0f, 0.0f, +0.0005f));
+		
 	}
 }
 

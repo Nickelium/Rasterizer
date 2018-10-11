@@ -11,6 +11,8 @@
 #include "Texture.h"
 #include "Camera.h"
 #include "Vertex.h"
+#include "IShader.h"
+#include "Shaders.h"
 
 
 Renderer::Renderer(const Window& window)
@@ -21,7 +23,9 @@ Renderer::Renderer(const Window& window)
 	height(window.GetHeight()),
 	image(width, height),
 	zBuffer(new float[width * height]),
-	backgroundColor(0xFF, 0xFF, 0x0)
+	backgroundColor(234.0f / Color::MAX_VALUEF,
+					239.0f / Color::MAX_VALUEF,
+					247.0f / Color::MAX_VALUEF)
 {
 	Init(window);
 }
@@ -73,32 +77,28 @@ void Renderer::Render(Scene& scene, Camera& camera)
 	Matrix4f V = camera.GetViewMatrix();
 	Matrix4f P = Matrix4f::Perspective(60.0f, float(width) / height, 0.1f, 100.0f);
 	Matrix4f S = Matrix4f::Viewport(width, height);
-	Matrix4f VPS =   S * P * V ;
+
 	for (const Object& object : scene.GetObjects())
 	{
 		Texture* texture = object.GetTexture();
-		Matrix4f MVPS = VPS * object.GetTransform().GetMatrix();
 		Matrix4f M = object.GetTransform().GetMatrix();
+
+		IShader* shader = new GouraudShading(M, V, P, S, object);
 
 		for (const Triangle& objectSpaceTriangle : object.GetMesh()->GetTriangles())
 		{
-			Triangle worldSpaceTriangle = M * objectSpaceTriangle;
-			Triangle imageSpaceTriangle = MVPS * objectSpaceTriangle;
-
-
-			Vector3f normal;
-			normal = Cross(worldSpaceTriangle[2] - worldSpaceTriangle[0], worldSpaceTriangle[1] - worldSpaceTriangle[0]).Normalize();
-
-			float intensity = Dot(normal, lightDir);
-			if (intensity > 0.0f)
-			{
-				//ScanlineFast(imageSpaceTriangle, intensity);	
-				if(!imageSpaceTriangle.GetNormals().empty())
-				ScanlineClean(imageSpaceTriangle, texture, lightDir);
-				else ScanlineClean(imageSpaceTriangle, texture, intensity);
-				//DrawTriangle(imageSpaceTriangle);
-			}
+			Vector3f vertices[3];
+			for (int i = 0; i < 3; ++i)
+				vertices[i] = shader->VertexShader(objectSpaceTriangle, i);
+			Vector3f normal = Cross(vertices[2] - vertices[0], vertices[1] - vertices[0]);
+			bool backfaceCulling = normal.z < 0;
+			//if (backfaceCulling)
+			//	continue;
+			//ScanlineFast(imageSpaceTriangle, intensity);	
+			ScanlineClean(*shader, vertices, objectSpaceTriangle);
+			
 		}
+		delete shader;
 	}
 
 	Finalize();
@@ -117,7 +117,7 @@ void Renderer::DrawTriangle(const Triangle& triangle)
 //Bresenham's line algorithm
 void Renderer::DrawLine(Vector2i p0, Vector2i p1)
 {
-	Color color(255, 255, 255);
+	Color color(1.0f, 0, 0);
 
 	p0.y = height - p0.y;
 	p1.y = height - p1.y;
@@ -160,86 +160,75 @@ void Renderer::DrawLine(Vector2i p0, Vector2i p1)
 		}
 	}
 }
+//
+//void Renderer::ScanlineClean(IShader& shader, Vector3f* vertices, const Triangle& triangle, Texture* texture)
+//{
+//	if (abs(triangle[0].y - triangle[1].y) < 0.0001f &&
+//		abs(triangle[1].y - triangle[2].y) < 0.0001f)
+//		return;
+//
+//	Vector2f min(std::numeric_limits<float>::max()), 
+//			 max(-std::numeric_limits<float>::max());
+//	for (const Vector3f& p : triangle.GetVertices())
+//	{
+//		Vector2f p2D(p.x, p.y);
+//		min = Maths::min(min, p2D);
+//		max = Maths::max(max, p2D);
+//	}
+//
+//	Color color(0xFF, 0xFF, 0xFF);
+//	float u, v, w;
+//	for (int y = int((min.y)), endY = int((max.y)); y <= endY; ++y)
+//		for (int x = int((min.x)), endX = int((max.x)); x <= endX; ++x)
+//		{
+//			Triangle::Barycentric(vertices, Vector3f(float(x), float(y), 0.0f), u, v, w);
+//			if (u < 0.0f || v < 0.0f || w < 0.0f) continue;
+//			float Z = u * triangle[0].z + v * triangle[1].z + w * triangle[2].z;
+//			float zBufferValue = GetZBuffer(x, y);
+//			if (Z < zBufferValue)
+//			{
+//				SetZBuffer(x, y, Z);
+//				/*if (texture)
+//				{
+//					auto UVs = triangle.GetUVs();
+//					Vector2f st = u * UVs[0] + v * UVs[1] + w * UVs[2];
+//					color = texture->GetColor(st.x, st.y);*/
+//				//}
+//				shader.FragmentShader(Vector3f(u, v, w), color);
+//				image.SetPixel(x, y, color);
+//			}
+//		}
+//}
 
-void Renderer::ScanlineClean(const Triangle& triangle, Texture* texture, float intensity)
+void Renderer::ScanlineClean(IShader& shader, Vector3f* vertices, const Triangle& triangle)
 {
-	if (abs(triangle[0].y - triangle[1].y) < 0.0001f &&
-		abs(triangle[1].y - triangle[2].y) < 0.0001f)
-		return;
-
-	Vector2f min(std::numeric_limits<float>::max()), 
-			 max(-std::numeric_limits<float>::max());
-	for (const Vector3f& p : triangle.GetVertices())
-	{
-		Vector2f p2D(p.x, p.y);
-		min = Maths::min(min, p2D);
-		max = Maths::max(max, p2D);
-	}
-
-	Color color(0xFF, 0xFF, 0xFF);
-	color = color * intensity;
-
-	float u, v, w;
-	for (int y = int((min.y)), endY = int((max.y)); y <= endY; ++y)
-		for (int x = int((min.x)), endX = int((max.x)); x <= endX; ++x)
-		{
-			Triangle::Barycentric(triangle, Vector3f(float(x), float(y), 0.0f), u, v, w);
-			if (u < 0.0f || v < 0.0f || w < 0.0f) continue;
-			float Z = u * triangle[0].z + v * triangle[1].z + w * triangle[2].z;
-			float zBufferValue = GetZBuffer(x, y);
-			if (Z < zBufferValue)
-			{
-				SetZBuffer(x, y, Z);
-				if (texture)
-				{
-					auto UVs = triangle.GetUVs();
-					Vector2f st = u * UVs[0] + v * UVs[1] + w * UVs[2];
-					color = texture->GetColor(st.x, st.y) * intensity;
-				}
-				image.SetPixel(x, y, color);
-			}
-		}
-}
-
-void Renderer::ScanlineClean(const Triangle& triangle, Texture* texture, const Vector3f& lightDir)
-{
-	if (abs(triangle[0].y - triangle[1].y) < 0.0001f &&
-		abs(triangle[1].y - triangle[2].y) < 0.0001f)
+	if (abs(vertices[0].y - vertices[1].y) < 0.0001f &&
+		abs(vertices[1].y - vertices[2].y) < 0.0001f)
 		return;
 
 	Vector2f min(std::numeric_limits<float>::max()),
 		max(-std::numeric_limits<float>::max());
-	for (const Vector3f& p : triangle.GetVertices())
+	for (int i = 0; i < Triangle::Size(); ++i)
 	{
+		Vector3f p = vertices[i];
 		Vector2f p2D(p.x, p.y);
 		min = Maths::min(min, p2D);
 		max = Maths::max(max, p2D);
 	}
 
-	Color color(0xFF, 0xFF, 0xFF);
-	float diffuse0 = Dot(lightDir, triangle.GetNormals()[0]);
-	float diffuse1 = Dot(lightDir, triangle.GetNormals()[1]);
-	float diffuse2 = Dot(lightDir, triangle.GetNormals()[2]);
-
+	Color color(1.0f, 1.0f, 1.0f);
 	float u, v, w;
 	for (int y = int((min.y)), endY = int((max.y)); y <= endY; ++y)
 		for (int x = int((min.x)), endX = int((max.x)); x <= endX; ++x)
 		{
-			Triangle::Barycentric(triangle, Vector3f(float(x), float(y), 0.0f), u, v, w);
+			Triangle::Barycentric(vertices, Vector3f(float(x), float(y), 0.0f), u, v, w);
 			if (u < 0.0f || v < 0.0f || w < 0.0f) continue;
-			float Z = u * triangle[0].z + v * triangle[1].z + w * triangle[2].z;
-			float diffuse = u * diffuse0 + v * diffuse1 + w * diffuse2;
-			diffuse = std::max(diffuse, 0.0f);
+			float Z = u * vertices[0].z + v * vertices[1].z + w * vertices[2].z;
 			float zBufferValue = GetZBuffer(x, y);
 			if (Z < zBufferValue)
 			{
 				SetZBuffer(x, y, Z);
-				if (texture)
-				{
-					auto UVs = triangle.GetUVs();
-					Vector2f st = u * UVs[0] + v * UVs[1] + w * UVs[2];
-					color = texture->GetColor(st.x, st.y) * diffuse;
-				}
+				shader.FragmentShader(Vector3f(u, v, w), color);
 				image.SetPixel(x, y, color);
 			}
 		}
@@ -253,7 +242,7 @@ void Renderer::ScanlineFast(Triangle triangle, float intensity)
 		return;
 
 	Triangle::Sort(triangle);
-	Color color(255, 255, 255);
+	Color color(1.0f, 1.0f, 1.0f);
 	color = color * intensity;
 
 	//Draw lower half
@@ -273,7 +262,7 @@ void Renderer::ScanlineFast(Triangle triangle, float intensity)
 			*end = image.buffer + y * image.width + int(B.x), 
 			x = int(A.x); p <= end; ++p, ++x)
 		{
-			Triangle::Barycentric(triangle, Vector3f(float(x), float(y), 0.0f), u, v, w);
+			Triangle::Barycentric(nullptr, Vector3f(float(x), float(y), 0.0f), u, v, w);
 			float Z = u * triangle[0].z + v * triangle[1].z + w * triangle[2].z;
 			if (Z < GetZBuffer(x, y))
 			{
@@ -299,7 +288,7 @@ void Renderer::ScanlineFast(Triangle triangle, float intensity)
 			*end = image.buffer + y * image.width + int(B.x),
 			x = int(A.x); p <= end; ++p, ++x)
 		{
-			Triangle::Barycentric(triangle, Vector3f(float(x), float(y), 0.0f), u, v, w);
+			Triangle::Barycentric(nullptr, Vector3f(float(x), float(y), 0.0f), u, v, w);
 			float Z = u * triangle[0].z + v * triangle[1].z + w * triangle[2].z;
 			if (Z > GetZBuffer(x, y))
 			{
