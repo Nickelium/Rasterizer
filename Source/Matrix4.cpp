@@ -28,6 +28,12 @@ Matrix4f::Matrix4f(const Vector4f& v1, const Vector4f& v2, const Vector4f& v3, c
 {
 }
 
+Matrix4f& Matrix4f::operator=(const Matrix4f& other)
+{
+	std::memcpy(M, other.M, sizeof(other.M));
+	return *this;
+}
+
 Matrix4f::Matrix4f(float diag)
 {
 	for (int i = 0; i < N * N; ++i)

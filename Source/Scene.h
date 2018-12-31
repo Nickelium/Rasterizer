@@ -7,11 +7,8 @@ class Scene
 public:
 	Scene();
 	std::vector<Object>& GetObjects();
-	Vector3f& GetLight();
+	void AddObject(Object& object);
 private:
 	void BuildScene();
-	//Camera	
-	Vector3f directionalLight;
 	std::vector<Object> objects;
-
 };

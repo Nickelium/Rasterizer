@@ -116,6 +116,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Source\ObjectFactory.cpp" />
     <ClCompile Include="Source\Camera.cpp" />
     <ClCompile Include="Source\Application.cpp" />
     <ClCompile Include="Source\Color.cpp" />
@@ -134,9 +135,9 @@
     <ClCompile Include="Source\Window.cpp" />
     <ClCompile Include="Source\Texture.cpp" />
     <ClCompile Include="Source\Transform.cpp" />
-    <ClCompile Include="Source\Vertex.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Source\ObjectFactory.h" />
     <ClInclude Include="Source\Camera.h" />
     <ClInclude Include="Dependencies\stb_image.h" />
     <ClInclude Include="Source\Application.h" />
@@ -159,7 +160,6 @@
     <ClInclude Include="Source\Window.h" />
     <ClInclude Include="Source\Texture.h" />
     <ClInclude Include="Source\Transform.h" />
-    <ClInclude Include="Source\Vertex.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

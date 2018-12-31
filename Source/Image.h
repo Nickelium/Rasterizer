@@ -1,5 +1,4 @@
-#ifndef _IMAGE_H
-#define _IMAGE_H
+#pragma once
 
 #include <stdint.h>
 struct Color;
@@ -23,5 +22,3 @@ public:
 	const int height;
 	uint32_t* buffer;
 };
-
-#endif

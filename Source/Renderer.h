@@ -4,6 +4,7 @@
 #include "Vector3.h"
 #include "Image.h"
 #include "Color.h"
+#include "Shaders.h"
 
 struct SDL_Surface;
 struct SDL_Renderer;
@@ -20,6 +21,8 @@ class Renderer
 public:
 	Renderer(const Window& window);
 	void Render(Scene& scene, Camera& camera);
+	void ChangeShader(bool orderDown = false);
+	void ChangeRenderMode();
 
 	~Renderer();
 private:
@@ -44,4 +47,11 @@ private:
 	SDL_Surface* sdlSurface;
 	SDL_Renderer* sdlRenderer;
 	SDL_Texture* sdlTexture;
+
+	std::vector<IShader*> shaders;
+	std::vector<IShader*>::size_type index;
+	IShader* shader;
+
+	bool useTexture;
+	bool wireframeRender;
 };

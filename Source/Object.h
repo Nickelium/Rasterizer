@@ -6,27 +6,34 @@
 
 struct Material
 {
-	Vector3f ambient = Vector3f{0.0f};
-	Vector3f diffuse = Vector3f{1.0f};
-	Vector3f specular = Vector3f{1.0f};
-	float shininess = 0.5f;
+	Color ambient = {1.0f, 0.5f, 0.31f};
+	Color diffuse = {1.0f, 0.5f, 0.31f};
+	Color specular = {0.5f, 0.5f, 0.5f};
+	float shininess = 32.0f;
 };
 
 class Object 
 {
 public:
-	Object(const char* fileName);
-	Object(const char* fileName, const char* textureName);
+	Object(const char* fileName,
+		const char* textureName = nullptr, 
+		const char* specularMap = nullptr,
+		const char* normapMap = nullptr);
 	Object(Object&& other);
 	~Object();
 
 	Mesh* GetMesh() const;
-	Texture* GetTexture() const;
+	Texture* GetDiffuseMap() const;
+	Texture* GetSpecularMap() const;
+	Texture* GetNormalMap() const;
+
 	Material GetMaterial() const;
 	Transform GetTransform() const;
 
 	void SetMaterial(const Material& transform);
 	void SetTransform(const Transform& transform);
+
+	void SetPosition(const Vector3f& pos);
 
 	void Move(const Vector3f& dR);
 	void Rotate(const Vector3f& dR);
@@ -34,6 +41,8 @@ public:
 private:
 	Mesh* mesh;
 	Texture* texture;
+	Texture* specularMap;
+	Texture* normalMap;
 
 	Material material;
 

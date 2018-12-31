@@ -2,6 +2,8 @@
 
 #include "Window.h"
 #include "Renderer.h"
+#include "Timer.h"
+#include "ObjectFactory.h"
 
 class Camera;
 
@@ -17,8 +19,18 @@ private:
 
 	void Update(Scene& scene, Camera& camera);
 
+	void ChangeScene(bool incrOrder);
+
 	bool requestClose;
 
 	Window* window;
 	Renderer* renderer;
+
+	std::vector<Scene*> scenes;
+	Scene* activeScene;
+	std::vector<Scene*>::size_type index;
+
+	ObjectFactory factory;
+
+	Timer timer;
 };

@@ -14,6 +14,6 @@ namespace Maths
 	float Degrees(float rad);
 	float Clamp(float min, float max, float v);
 	
-	Vector2f min(const Vector2f& v, const Vector2f& w);
-	Vector2f max(const Vector2f& v, const Vector2f& w);
-}
+	Vector2f Min(const Vector2f& v, const Vector2f& w);
+	Vector2f Max(const Vector2f& v, const Vector2f& w); //lower case conflicts name
+}	

@@ -1,6 +1,5 @@
-#pragma once
 
-#include <SDL.h>
+#include <SDL\SDL.h>
 #include <Windows.h>
 
 #include "Application.h"

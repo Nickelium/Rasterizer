@@ -42,7 +42,7 @@ void Mesh::ParseFile(const char* fileName)
 			std::stringstream ss(line.substr(3));
 			float x, y, z;
 			ss >> x >> y >> z;
-			normals.emplace_back(x, y, -z);
+			normals.emplace_back(x, y, z);
 		}
 		else if (line.substr(0, 2) == "f ")
 		{
@@ -75,7 +75,7 @@ void Mesh::ParseFile(const char* fileName)
 void Mesh::ProcessTriangles()
 {
 	int index = 0;
-	for (std::vector<std::vector<int>>::iterator it = faces.begin(); it != faces.end(); ++it, ++index)
+	for (auto it = faces.begin(); it != faces.end(); ++it, ++index)
 	{
 		Triangle triangle(vertices[(*it)[0]], vertices[(*it)[1]], vertices[(*it)[2]]);
 		if (!texCoords.empty())

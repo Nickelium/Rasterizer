@@ -13,6 +13,7 @@ public:
 			float m8, float m9, float m10, float m11,
 			float m12, float m13, float m14, float m15);
 	Matrix4f(const Vector4f& v1, const Vector4f& v2, const Vector4f& v3, const Vector4f& o);
+	Matrix4f& operator=(const Matrix4f& other);
 
 	Vector4f operator*(const Vector4f& v) const;
 	Matrix4f operator*(const Matrix4f& other) const;

@@ -1,6 +1,6 @@
 #include "Renderer.h"
 
-#include <SDL.h>
+#include <SDL\SDL.h>
 #include <cstdio>
 #include <algorithm>
 
@@ -10,7 +10,6 @@
 #include "Scene.h" 
 #include "Texture.h"
 #include "Camera.h"
-#include "Vertex.h"
 #include "IShader.h"
 #include "Shaders.h"
 
@@ -25,14 +24,23 @@ Renderer::Renderer(const Window& window)
 	zBuffer(new float[width * height]),
 	backgroundColor(234.0f / Color::MAX_VALUEF,
 					239.0f / Color::MAX_VALUEF,
-					247.0f / Color::MAX_VALUEF)
+					247.0f / Color::MAX_VALUEF),
+	index(0u),
+	useTexture(false),
+	wireframeRender(true)
 {
+	shaders.push_back(new FlatShading());
+	shaders.push_back(new GouraudShading());
+	shaders.push_back(new PhongShading());
+	shader = shaders[index];
 	Init(window);
 }
 
 Renderer::~Renderer()
 {
 	delete[] zBuffer;
+	for (auto& shad : shaders)
+		delete shad;
 }
 
 void Renderer::Init(const Window& window)
@@ -73,35 +81,73 @@ void Renderer::Render(Scene& scene, Camera& camera)
 {
 	Clear();
 
-	Vector3f lightDir = scene.GetLight().Normalize();
 	Matrix4f V = camera.GetViewMatrix();
 	Matrix4f P = Matrix4f::Perspective(60.0f, float(width) / height, 0.1f, 100.0f);
 	Matrix4f S = Matrix4f::Viewport(width, height);
-
+	LightParam lightInfo;
+	lightInfo.direction = Vector3f(1.0f, 1.0f, 1.0f).Normalize();
+	const float invMaxValue = 1.0f / 255.0f;
+	lightInfo.diffuseColor = Color(
+		255.0f * invMaxValue, 
+		249.0f * invMaxValue, 
+		232.0f * invMaxValue, 1.0f);
 	for (const Object& object : scene.GetObjects())
 	{
-		Texture* texture = object.GetTexture();
+		Texture* texture = object.GetDiffuseMap();
 		Matrix4f M = object.GetTransform().GetMatrix();
-
-		IShader* shader = new GouraudShading(M, V, P, S, object);
+		
+		shader->UpdateUniforms(M, V, P, S, object, lightInfo, useTexture);
 
 		for (const Triangle& objectSpaceTriangle : object.GetMesh()->GetTriangles())
 		{
 			Vector3f vertices[3];
 			for (int i = 0; i < 3; ++i)
 				vertices[i] = shader->VertexShader(objectSpaceTriangle, i);
-			Vector3f normal = Cross(vertices[2] - vertices[0], vertices[1] - vertices[0]);
-			bool backfaceCulling = normal.z < 0;
-			//if (backfaceCulling)
-			//	continue;
-			//ScanlineFast(imageSpaceTriangle, intensity);	
-			ScanlineClean(*shader, vertices, objectSpaceTriangle);
+			if(wireframeRender)
+				DrawTriangle(Triangle(vertices[0], vertices[1], vertices[2]));
+			else
+			{
+				Vector3f normal = Cross(vertices[1] - vertices[0], vertices[2] - vertices[0]);
+				bool backfaceCulling = normal.z < 0;
+				if (backfaceCulling)
+						continue;
+				//ScanlineFast(imageSpaceTriangle, intensity);	
+				ScanlineClean(*shader, vertices, objectSpaceTriangle);
+			}
 			
 		}
-		delete shader;
 	}
 
 	Finalize();
+}
+
+void Renderer::ChangeShader(bool orderDown)
+{
+	if (!orderDown)
+		index = std::min(index + 1, shaders.size() - 1);
+	else
+		index = std::max((signed)index - 1, 0);
+
+	shader = shaders[index];
+}
+
+void Renderer::ChangeRenderMode()
+{
+	if (wireframeRender && !useTexture)
+	{
+		wireframeRender = false;
+		useTexture = false;
+	}
+	else if(!wireframeRender && !useTexture)
+	{
+		wireframeRender = false;
+		useTexture = true;
+	}
+	else if(!wireframeRender && useTexture)
+	{
+		wireframeRender = true;
+		useTexture = false;
+	}
 }
 
 void Renderer::DrawTriangle(const Triangle& triangle)
@@ -118,9 +164,6 @@ void Renderer::DrawTriangle(const Triangle& triangle)
 void Renderer::DrawLine(Vector2i p0, Vector2i p1)
 {
 	Color color(1.0f, 0, 0);
-
-	p0.y = height - p0.y;
-	p1.y = height - p1.y;
 
 	bool steep = false;
 	if (abs(p0.x - p1.x) < abs(p0.y - p1.y))
@@ -167,19 +210,19 @@ void Renderer::DrawLine(Vector2i p0, Vector2i p1)
 //		abs(triangle[1].y - triangle[2].y) < 0.0001f)
 //		return;
 //
-//	Vector2f min(std::numeric_limits<float>::max()), 
-//			 max(-std::numeric_limits<float>::max());
+//	Vector2f Min(std::numeric_limits<float>::Max()), 
+//			 Max(-std::numeric_limits<float>::Max());
 //	for (const Vector3f& p : triangle.GetVertices())
 //	{
 //		Vector2f p2D(p.x, p.y);
-//		min = Maths::min(min, p2D);
-//		max = Maths::max(max, p2D);
+//		Min = Maths::Min(Min, p2D);
+//		Max = Maths::Max(Max, p2D);
 //	}
 //
 //	Color color(0xFF, 0xFF, 0xFF);
 //	float u, v, w;
-//	for (int y = int((min.y)), endY = int((max.y)); y <= endY; ++y)
-//		for (int x = int((min.x)), endX = int((max.x)); x <= endX; ++x)
+//	for (int y = int((Min.y)), endY = int((Max.y)); y <= endY; ++y)
+//		for (int x = int((Min.x)), endX = int((Max.x)); x <= endX; ++x)
 //		{
 //			Triangle::Barycentric(vertices, Vector3f(float(x), float(y), 0.0f), u, v, w);
 //			if (u < 0.0f || v < 0.0f || w < 0.0f) continue;
@@ -212,8 +255,8 @@ void Renderer::ScanlineClean(IShader& shader, Vector3f* vertices, const Triangle
 	{
 		Vector3f p = vertices[i];
 		Vector2f p2D(p.x, p.y);
-		min = Maths::min(min, p2D);
-		max = Maths::max(max, p2D);
+		min = Maths::Min(min, p2D);
+		max = Maths::Max(max, p2D);
 	}
 
 	Color color(1.0f, 1.0f, 1.0f);
