@@ -71,23 +71,7 @@ void Triangle::Barycentric(Vector3f* vertices, const Vector3f& P, float& u, floa
 	w = 1.0f - u - v; // gamma
 }
 
-//Selection Sort on y value, because only 3 vertices
-void Triangle::Sort(Triangle& triangle) 
-{
-	size_t nbVertices = 3, k = 0; float minY;
-	for (size_t i = 0; i < nbVertices; ++i)
-	{
-		k = i;
-		minY = triangle[i].y;
-		for (size_t j = i + 1; j < nbVertices; ++j)
-			if (minY > triangle[j].y)
-			{
-				minY = triangle[j].y;
-				k = j;
-			}
-		std::swap(triangle[k], triangle[i]);
-	}
-}
+
 
 //Multiply
 //Triangle operator*(const Matrix4f& M, const Triangle& triangle) 

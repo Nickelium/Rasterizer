@@ -2,7 +2,7 @@
 
 #include "Vector2.h"
 #include "Vector3.h"
-#include "Image.h"
+#include "Buffer.h"
 #include "Color.h"
 #include "Shaders.h"
 
@@ -19,34 +19,46 @@ class IShader;
 class Renderer
 {
 public:
-	Renderer(const Window& window);
-	void Render(Scene& scene, Camera& camera);
-	void ChangeShader(bool orderDown = false);
+	Renderer(Window* window);
+	void Render(Scene& scene);
 	void ChangeRenderMode();
 
 	~Renderer();
 private:
-	void Init(const Window& window);
 	void Clear();
-	void ClearZBuffer();
 	void Finalize();
+
+	void ConfigureRenderSettings();
 
 	void DrawLine(Vector2i p0, Vector2i p1);
 	void DrawTriangle(const Triangle& triangle);
-	void ScanlineClean(IShader& shader, Vector3f* vertices, const Triangle& triangle);
-	void ScanlineFast(Triangle triangle, float intensity);
+	void ScanlineClean(IShader& shader, Vector3f* vertices);
+	void ScanlineFast(IShader& shader, Vector3f* vertices);
 
-	void SetZBuffer(int x, int y, float depth);
-	float GetZBuffer(int x, int y) const;
+	enum class RENDER_MODE : unsigned char
+	{
+		RM_WIREFRAME = 0,
+		RM_FLAT,
+		RM_GOURAUD,
+		RM_PHONG,
+		RM_TEXTURED,
+		RM_NUMBER_MODES
+	} renderMode;
+
+	enum class SHADER_TYPES: unsigned char
+	{
+		ST_FLAT = 0,
+		ST_GOURAUD,
+		ST_PHONG,
+		ST_NUMBER_TYPES
+	};
 
 	const int width, height;
-	Image image;
-	float* zBuffer;
+	Buffer<uint32_t> cBuffer;
+	Buffer<float> zBuffer;
 	Color backgroundColor;
 
-	SDL_Surface* sdlSurface;
-	SDL_Renderer* sdlRenderer;
-	SDL_Texture* sdlTexture;
+	Window* window;
 
 	std::vector<IShader*> shaders;
 	std::vector<IShader*>::size_type index;

@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
@@ -113,14 +113,17 @@
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
+      <EntryPointSymbol>
+      </EntryPointSymbol>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Source\InputHandler.cpp" />
     <ClCompile Include="Source\ObjectFactory.cpp" />
     <ClCompile Include="Source\Camera.cpp" />
-    <ClCompile Include="Source\Application.cpp" />
+    <ClCompile Include="Source\Engine.cpp" />
     <ClCompile Include="Source\Color.cpp" />
-    <ClCompile Include="Source\Image.cpp" />
+    <ClCompile Include="Source\Buffer.cpp" />
     <ClCompile Include="Source\main.cpp" />
     <ClCompile Include="Source\Maths.cpp" />
     <ClCompile Include="Source\Matrix3.cpp" />
@@ -129,6 +132,7 @@
     <ClCompile Include="Source\Object.cpp" />
     <ClCompile Include="Source\Renderer.cpp" />
     <ClCompile Include="Source\Scene.cpp" />
+    <ClCompile Include="Source\SceneHandler.cpp" />
     <ClCompile Include="Source\Shaders.cpp" />
     <ClCompile Include="Source\Timer.cpp" />
     <ClCompile Include="Source\Triangle.cpp" />
@@ -137,12 +141,13 @@
     <ClCompile Include="Source\Transform.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Source\InputHandler.h" />
     <ClInclude Include="Source\ObjectFactory.h" />
     <ClInclude Include="Source\Camera.h" />
     <ClInclude Include="Dependencies\stb_image.h" />
-    <ClInclude Include="Source\Application.h" />
+    <ClInclude Include="Source\Engine.h" />
     <ClInclude Include="Source\Color.h" />
-    <ClInclude Include="Source\Image.h" />
+    <ClInclude Include="Source\Buffer.h" />
     <ClInclude Include="Source\IShader.h" />
     <ClInclude Include="Source\Maths.h" />
     <ClInclude Include="Source\Matrix3.h" />
@@ -151,6 +156,7 @@
     <ClInclude Include="Source\Object.h" />
     <ClInclude Include="Source\Renderer.h" />
     <ClInclude Include="Source\Scene.h" />
+    <ClInclude Include="Source\SceneHandler.h" />
     <ClInclude Include="Source\Shaders.h" />
     <ClInclude Include="Source\Timer.h" />
     <ClInclude Include="Source\Triangle.h" />

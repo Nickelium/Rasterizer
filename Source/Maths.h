@@ -16,4 +16,8 @@ namespace Maths
 	
 	Vector2f Min(const Vector2f& v, const Vector2f& w);
 	Vector2f Max(const Vector2f& v, const Vector2f& w); //lower case conflicts name
+
+	//Selection Sort on y value, because only 3 vertices
+	void Sort(Vector3f* vertices, int size);
+	
 }	

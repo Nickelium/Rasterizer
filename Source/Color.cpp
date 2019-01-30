@@ -11,11 +11,10 @@ const int Color::MIN_VALUEI = 0;
 const int Color::MAX_VALUEI = 255;
 
 
-Color::Color(float r, float g, float b, float a)
+Color::Color(float r, float g, float b)
 	:r(ClampValue(r)),
 	g(ClampValue(g)),
-	b(ClampValue(b)),
-	a(ClampValue(a))
+	b(ClampValue(b))
 {
 }
 
@@ -42,26 +41,24 @@ Color IntToColor(uint32_t c)
 	float invMaxValue = 1.0f / 255.0f;
 	return  Color
 	(
-		float(c >> 24) * invMaxValue,
 		float(c >> 16) * invMaxValue,
 		float(c >> 8) * invMaxValue,
-		float(c) * invMaxValue
+		float(c >> 0) * invMaxValue
 	);
 }
 
 uint32_t ColorToInt(const Color& c)
 {
 	float maxValue = 255.0f;
-	return	
-		(uint32_t(c.r * maxValue) << 24) |
-		(uint32_t(c.g * maxValue) << 16) |
-		(uint32_t(c.b * maxValue) << 8) |
-		(uint32_t(c.a * maxValue) << 0);
+	return
+		(uint32_t(c.r * maxValue) << 16) |
+		(uint32_t(c.g * maxValue) << 8) |
+		(uint32_t(c.b * maxValue) << 0);
 }
 
 Color operator*(const Color& c, const Color& d)
 {
-	return Color(c.r * d.r, c.g * d.g, c.b * d.b, c.a * d.a);
+	return Color(c.r * d.r, c.g * d.g, c.b * d.b);
 }
 
 Color operator*(const Color& c, const Vector3f& v)
@@ -71,7 +68,7 @@ Color operator*(const Color& c, const Vector3f& v)
 
 Color operator*(const Color& c, const Vector4f& v)
 {
-	return Color(c.r * v.x, c.g * v.y, c.b * v.z, c.a * v.w);
+	return Color(c.r * v.x, c.g * v.y, c.b * v.z);
 }
 
 Color operator*(const Vector3f& v, const Color& c)
@@ -86,12 +83,12 @@ Color operator*(const Vector4f& v, const Color& c)
 
 Color operator+(const Color& c, const Color& d)
 {
-	return Color(c.r + d.r, c.g + d.g, c.b + d.b, c.a + d.a);
+	return Color(c.r + d.r, c.g + d.g, c.b + d.b);
 }
 
 Color operator*(const Color& c, float f)
 {
-	return Color(c.r * f, c.g * f, c.b * f, c.a);
+	return Color(c.r * f, c.g * f, c.b * f);
 }
 
 Color operator*(float f, const Color& c)

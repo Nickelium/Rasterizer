@@ -1,8 +1,6 @@
 #include "Window.h"
 
 #include <SDL\SDL.h>
-#include <imgui/imgui.h>
-#include <imgui/imgui_impl_sdl_gl3.h>
 #include <glad/glad.h>
 
 #include <cstdio>
@@ -17,9 +15,9 @@
 
 
 Window::Window(int width, int height)
-	:width(width),
+	:title("Software Rasterizer"),
+	width(width),
 	height(height), 
-	title("Software Rasterizer"),
 	sdlWindow(nullptr)
 {
 	Init();
@@ -27,7 +25,6 @@ Window::Window(int width, int height)
 
 Window::~Window()
 {
-	//SDL_GL_DeleteContext(glcontext);
 	SDL_DestroyWindow(sdlWindow);
 	SDL_Quit();
 }
@@ -60,31 +57,63 @@ void Window::SetInfo(float fps, float ms)
 	strMs + "ms").c_str());
 }
 
-void Window::Update()
+void Window::Update(float dt)
 {
 	SDL_UpdateWindowSurface(sdlWindow);
 }
 
-void Window::Init()
+void Window::SwapBuffer(const Buffer<uint32_t>& buffer)
 {
-	// Setup SDL
+	SDL_LockSurface(sdlSurface);
+	//Copy pixels buffer results to screen surface
+	memcpy(sdlSurface->pixels, buffer.GetBuffer(), buffer.GetSize());
+	SDL_UnlockSurface(sdlSurface);
+}
+
+bool Window::Init()
+{
+	if (!InitSDL())
+		return  false;
+
+	if (!CreateWindowSDL())
+		return false;
+
+	if (!CreateSurfaceSDL())
+		return false;
+
+	SDL_GL_SetSwapInterval(1);
+	
+	return true;
+}
+
+bool Window::InitSDL()
+{
 	if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_TIMER) != 0)
 	{
 		printf("Error: %s\n", SDL_GetError());
+		return false;
 	}
-	SDL_GL_SetAttribute(SDL_GL_CONTEXT_FLAGS, SDL_GL_CONTEXT_FORWARD_COMPATIBLE_FLAG);
-	SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
-	SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
-	SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 24);
-	SDL_GL_SetAttribute(SDL_GL_STENCIL_SIZE, 8);
-	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
-	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 3);
-	SDL_DisplayMode current;
-	SDL_GetCurrentDisplayMode(0, &current);
-	sdlWindow = SDL_CreateWindow(title, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, width, height, SDL_WINDOW_SHOWN);
-	if (!sdlWindow)
-		fprintf(stderr, "Window could not be created: %s\n", SDL_GetError());
-	SDL_GLContext glcontext = SDL_GL_CreateContext(sdlWindow);
+	return true;
+}
 
-	SDL_GL_SetSwapInterval(1); //Sync update with monitor screen
+bool Window::CreateWindowSDL()
+{
+	sdlWindow = SDL_CreateWindow(title, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, width, height, SDL_WINDOW_SHOWN);
+	if(!sdlWindow)
+	{
+		printf("Window could not be created: %s\n", SDL_GetError());
+		return false;
+	}
+	return true;
+}
+
+bool Window::CreateSurfaceSDL()
+{
+	sdlSurface = SDL_GetWindowSurface(sdlWindow);
+	if(!sdlSurface)
+	{
+		printf("Could not create window surface. Error: %s\n", SDL_GetError());
+		return false;
+	}
+	return true;
 }

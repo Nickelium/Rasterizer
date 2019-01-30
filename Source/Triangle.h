@@ -21,7 +21,6 @@ public:
 	static int Size();
 
 	static void Barycentric(Vector3f* vertices, const Vector3f& P, float& u, float& v, float& w);
-	static void Sort(Triangle& triangle);
 private:
 	std::vector<Vector3f> vertices;
 	std::vector<Vector2f> uvs;

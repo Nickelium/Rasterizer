@@ -2,7 +2,7 @@
 #include <SDL\SDL.h>
 #include <Windows.h>
 
-#include "Application.h"
+#include "Engine.h"
 #include <iostream>
 
 //Alternatively: Linker/Input/AdditionalDepdencies/..lib
@@ -15,7 +15,7 @@ int main(int argc, char** argv)
 {
 	StartHeapControl();
 	{
-		Application(1280, 720).Run();
+		Engine(1280, 720).Run();
 	}
 	_CrtDumpMemoryLeaks();
 
