@@ -193,6 +193,10 @@ void Renderer::ScanlineClean(IShader& shader, Vector3f* vertScreen)
 		abs(vertScreen[1].y - vertScreen[2].y) < 0.0001f)
 		return;
 
+	Vector3f edge0 = vertScreen[2] - vertScreen[1];
+	Vector3f edge1 = vertScreen[0] - vertScreen[2];
+	Vector3f edge2 = vertScreen[1] - vertScreen[0];
+
 	Vector2f min(std::numeric_limits<float>::max()),
 		max(-std::numeric_limits<float>::max());
 	for (int i = 0; i < Triangle::Size(); ++i)
@@ -206,6 +210,15 @@ void Renderer::ScanlineClean(IShader& shader, Vector3f* vertScreen)
 	Color color(1.0f, 1.0f, 1.0f);
 	float u, v, w;
 
+	auto isEdge = [](float w)
+	{
+		return std::abs(w) < 10e-6;
+	};
+	auto isTopBottom = [](Vector3f edge)
+	{
+		return edge.y < 0.0f || (std::abs(edge.y) < 10e-4 && edge.x < 0.0f);
+	};
+
 	int xMin = std::max(0, std::min(window->GetWidth(), static_cast<int>(std::floor(min.x))));
 	int yMin = std::max(0, std::min(window->GetHeight(), static_cast<int>(std::floor(min.y))));
 	int xMax = std::max(0, std::min(window->GetWidth(), static_cast<int>(std::floor(max.x))));
@@ -217,6 +230,13 @@ void Renderer::ScanlineClean(IShader& shader, Vector3f* vertScreen)
 			if (!(0.0f <= u && u <= 1.0f 
 			&& 0.0f <= v && v <= 1.0f
 			&& 0.0f <= w && w <= 1.0f)) continue;
+			if (isEdge(u) && !isTopBottom(edge0)) 
+				continue;
+			if (isEdge(v) && !isTopBottom(edge1)) 
+				continue;
+			if (isEdge(w) && !isTopBottom(edge2)) 
+				continue;
+
 			float Z = u * vertScreen[0].z + v * vertScreen[1].z + w * vertScreen[2].z;
 			float zBufferValue = zBuffer(x, y);
 			if (Z < zBufferValue)
