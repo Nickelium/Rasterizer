@@ -50,6 +50,7 @@ private:
 		ST_FLAT = 0,
 		ST_GOURAUD,
 		ST_PHONG,
+		ST_TEXTURED,
 		ST_NUMBER_TYPES
 	};
 
@@ -64,6 +65,5 @@ private:
 	std::vector<IShader*>::size_type index;
 	IShader* shader;
 
-	bool useTexture;
 	bool wireframeRender;
 };

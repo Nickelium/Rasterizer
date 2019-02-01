@@ -34,6 +34,6 @@ Camera& Scene::GetCamera()
 
 void Scene::BuildScene()
 {
-	camera.Move(Vector3f(0.0f, 0.0f, 4.5f));
+	camera.Move(Vector3f(0.0f, 0.0f, 0.0f));
 }
 

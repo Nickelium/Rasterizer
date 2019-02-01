@@ -47,27 +47,47 @@ void Mesh::ParseFile(const char* fileName)
 		else if (line.substr(0, 2) == "f ")
 		{
 			std::stringstream ss(line.substr(2));
-			int v0, v1, v2;
-			if (ss.str().find('/') != std::string::npos)
-			{
-				int uv0, uv1, uv2;
-				int n0, n1, n2;
 
-				char discardch;
-	
-				ss >> v0 >> discardch >> uv0 >> discardch >> n0;
-				ss >> v1 >> discardch >> uv1 >> discardch >> n1;
-				ss >> v2 >> discardch >> uv2 >> discardch >> n2;
-				faceTexCoords.push_back(std::vector<int>{uv0 - 1, uv1 - 1, uv2 - 1});
-				faceNormals.push_back(std::vector<int>{n0 - 1, n1 - 1, n2 - 1});
-			}
-			else
+			std::vector<std::string> splitStrings;
+			std::string x, y, z;
+			ss >> x >> y >> z;
+			auto processString = [&splitStrings](auto&& param, char delimiter)->decltype(auto)
 			{
-				ss >> v0
-					>> v1
-					>> v2;
-			}
-			faces.push_back(std::vector<int>{v0 - 1, v1 - 1, v2 - 1});
+				std::stringstream stream(std::forward<decltype(param)>(param));
+				std::string str;
+				while(std::getline(stream, str, delimiter))
+				{
+					if (str.empty())
+						str = "0";
+					splitStrings.push_back(std::move(str));
+				}
+			};
+			char delimeter = '/';
+			processString(x, delimeter);
+			processString(y, delimeter);
+			processString(z, delimeter);
+			auto handleNegativeIndex = [](int index, int maxIndex) -> decltype(auto)
+			{
+				return index > 0 ? index : maxIndex - abs(index) + 1;
+			};
+			faces.push_back(std::vector<int>
+			{
+				handleNegativeIndex(std::stoi(splitStrings[0 * 3 + 0]), vertices.size()) - 1,
+				handleNegativeIndex(std::stoi(splitStrings[1 * 3 + 0]), vertices.size()) - 1,
+				handleNegativeIndex(std::stoi(splitStrings[2 * 3 + 0]), vertices.size()) - 1
+			});
+			faceTexCoords.push_back(std::vector<int>
+			{
+				handleNegativeIndex(std::stoi(splitStrings[0 * 3 + 1]), texCoords.size()) - 1,
+				handleNegativeIndex(std::stoi(splitStrings[1 * 3 + 1]), texCoords.size()) - 1,
+				handleNegativeIndex(std::stoi(splitStrings[2 * 3 + 1]), texCoords.size()) - 1
+			});
+			faceNormals.push_back(std::vector<int>
+			{
+				handleNegativeIndex(std::stoi(splitStrings[0 * 3 + 2]), normals.size()) - 1,
+				handleNegativeIndex(std::stoi(splitStrings[1 * 3 + 2]), normals.size()) - 1,
+				handleNegativeIndex(std::stoi(splitStrings[2 * 3 + 2]), normals.size()) - 1
+			});
 		}
 	}
 }

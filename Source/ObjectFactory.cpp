@@ -11,20 +11,20 @@ Object ObjectFactory::CreateTriangle() const
 		Color{0.75, 0.75f, 0.75f},
 		Color{1.0, 1.0f, 1.0f},
 		32.0f });
-	object.SetTransform(Transform(Vector3f(0.0f, 0.0f, 0.0f), Vector3f(0.0f, 0.0f, 0.0f)));
-	return std::move(object);
+	object.SetTransform(Transform(Vector3f(0.0f, 0.0f, -5.0f), Vector3f(0.0f, 0.0f, 0.0f)));
+	return object; // don't move because of RVO
 }
 
 Object ObjectFactory::CreateCube() const
 {
-	Object object("cube.obj", "container.jpg");
+	Object object("cube2.obj", "container.jpg");
 	object.SetMaterial(Material{
 		Color{0.75, 0.75f, 0.75f},
 		Color{0.75, 0.75f, 0.75f},
 		Color{1.0, 1.0f, 1.0f},
 		32.0f });
-	object.SetTransform(Transform(Vector3f(0.0f, 0.0f, 0.0f), Vector3f(0.0f, 0.0f, 0.0f)));
-	return std::move(object);
+	object.SetTransform(Transform(Vector3f(0.0f, 0.0f, -5.0f), Vector3f(0.0f, 0.0f, 0.0f)));
+	return object;
 }
 
 Object ObjectFactory::CreateTeapot() const
@@ -35,8 +35,8 @@ Object ObjectFactory::CreateTeapot() const
 		Color{0.75, 0.75f, 0.75f},
 		Color{1.0, 1.0f, 1.0f},
 		32.0f });
-	object.SetTransform(Transform(Vector3f(0.0f, -0.5f, 0.5f), Vector3f(0.0f, 0.0f, 0.0f)));
-	return std::move(object);
+	object.SetTransform(Transform(Vector3f(0.0f, -0.5f, -3.5f), Vector3f(0.0f, 0.0f, 0.0f)));
+	return object;
 }
 
 Object ObjectFactory::CreateSuzanne() const
@@ -47,8 +47,8 @@ Object ObjectFactory::CreateSuzanne() const
 		Color{0.75, 0.75f, 0.75f},
 		Color{1.0, 1.0f, 1.0f},
 		32.0f });
-	object.SetTransform(Transform(Vector3f(0.0f, 0.0f, -1.5f), Vector3f(0.0f, 0.0f, 0.0f)));
-	return std::move(object);
+	object.SetTransform(Transform(Vector3f(0.0f, 0.0f, -5.5f), Vector3f(0.0f, 0.0f, 0.0f)));
+	return object;
 }
 
 Object ObjectFactory::CreateAfrican() const
@@ -59,8 +59,8 @@ Object ObjectFactory::CreateAfrican() const
 		Color{0.75, 0.75f, 0.75f},
 		Color{1.0, 1.0f, 1.0f},
 		32.0f });
-	object.SetTransform(Transform(Vector3f(0.0f, 0.0f, 0.75f), Vector3f(0.0f, 0.0f, 0.0f)));
-	return std::move(object);
+	object.SetTransform(Transform(Vector3f(0.0f, 0.0f, -3.75f), Vector3f(0.0f, 0.0f, 0.0f)));
+	return object;
 }
 
 Object ObjectFactory::CreateEyesInner() const
@@ -71,8 +71,8 @@ Object ObjectFactory::CreateEyesInner() const
 		Color{0.75, 0.75f, 0.75f},
 		Color{1.0, 1.0f, 1.0f},
 		32.0f });
-	object.SetTransform(Transform(Vector3f(0.0f, 0.0f, 0.75f), Vector3f(0.0f, 0.0f, 0.0f)));
-	return std::move(object);
+	object.SetTransform(Transform(Vector3f(0.0f, 0.0f, -3.75f), Vector3f(0.0f, 0.0f, 0.0f)));
+	return object;
 }
 
 Object ObjectFactory::CreateEyesOuter() const
@@ -83,8 +83,8 @@ Object ObjectFactory::CreateEyesOuter() const
 		Color{0.75, 0.75f, 0.75f},
 		Color{1.0, 1.0f, 1.0f},
 		32.0f });
-	object.SetTransform(Transform(Vector3f(0.0f, 0.0f, 0.75f), Vector3f(0.0f, 0.0f, 0.0f)));
-	return std::move(object);
+	object.SetTransform(Transform(Vector3f(0.0f, 0.0f, -3.75f), Vector3f(0.0f, 0.0f, 0.0f)));
+	return object;
 }
 
 Object ObjectFactory::CreateDiablo() const
@@ -95,6 +95,30 @@ Object ObjectFactory::CreateDiablo() const
 		Color{0.75, 0.75f, 0.75f},
 		Color{1.0, 1.0f, 1.0f},
 		32.0f });
-	object.SetTransform(Transform(Vector3f(0.0f, 0.0f, 0.5f), Vector3f(0.0f, 0.0f, 0.0f)));
-	return std::move(object);
+	object.SetTransform(Transform(Vector3f(0.0f, 0.0f, -4.0f), Vector3f(0.0f, 0.0f, 0.0f)));
+	return object;
+}
+
+Object ObjectFactory::CreateBMax() const
+{
+	Object object("Bigmax_White_OBJ.obj", "container.jpg");
+	object.SetMaterial(Material{
+		Color{0.75, 0.75f, 0.75f},
+		Color{0.75, 0.75f, 0.75f},
+		Color{1.0, 1.0f, 1.0f},
+		32.0f });
+	object.SetTransform(Transform(Vector3f(0.0f, -35.0f, -200.0f), Vector3f(0.0f, 0.0f, 0.0f)));
+	return object;
+}
+
+Object ObjectFactory::CreateChest() const
+{
+	Object object("chest_mesh.obj", "container.jpg");
+	object.SetMaterial(Material{
+		Color{0.75, 0.75f, 0.75f},
+		Color{0.75, 0.75f, 0.75f},
+		Color{1.0, 1.0f, 1.0f},
+		32.0f });
+	object.SetTransform(Transform(Vector3f(0.0f, -0.0f, -2.0f), Vector3f(0.0f, 0.0f, 0.0f)));
+	return object;
 }

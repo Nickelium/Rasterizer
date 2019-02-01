@@ -25,12 +25,12 @@ Renderer::Renderer(Window* window)
 					239.0f / Color::MAX_VALUEF,
 					247.0f / Color::MAX_VALUEF),
 	index(0u),
-	useTexture(false),
 	wireframeRender(true)
 {
 	shaders.push_back(new FlatShading());
 	shaders.push_back(new GouraudShading());
 	shaders.push_back(new PhongShading());
+	shaders.push_back(new TexturedShading());
 
 	ConfigureRenderSettings();
 }
@@ -59,27 +59,22 @@ void Renderer::ConfigureRenderSettings()
 	case RENDER_MODE::RM_WIREFRAME:
 		wireframeRender = true;
 		shader = shaders[static_cast<unsigned char>(SHADER_TYPES::ST_FLAT)];
-		useTexture = false;
 		break;
 	case RENDER_MODE::RM_FLAT:
 		wireframeRender = false;
 		shader = shaders[static_cast<unsigned char>(SHADER_TYPES::ST_FLAT)];
-		useTexture = false;
 		break;
 	case RENDER_MODE::RM_GOURAUD:
 		wireframeRender = false;
 		shader = shaders[static_cast<unsigned char>(SHADER_TYPES::ST_GOURAUD)];
-		useTexture = false;
 		break;
 	case RENDER_MODE::RM_PHONG:
 		wireframeRender = false;
 		shader = shaders[static_cast<unsigned char>(SHADER_TYPES::ST_PHONG)];
-		useTexture = false;
 		break;
 	case RENDER_MODE::RM_TEXTURED:
 		wireframeRender = false;
-		shader = shaders[static_cast<unsigned char>(SHADER_TYPES::ST_PHONG)];
-		useTexture = true;
+		shader = shaders[static_cast<unsigned char>(SHADER_TYPES::ST_TEXTURED)];
 		break;
 	default:
 		break;
@@ -108,7 +103,7 @@ void Renderer::Render(Scene& scene)
 		Texture* texture = object.GetDiffuseMap();
 		Matrix4f M = object.GetTransform().GetMatrix();
 		
-		shader->UpdateUniforms(M, V, P, S, object, lightInfo, useTexture);
+		shader->UpdateUniforms(M, V, P, S, object, lightInfo);
 
 		for (const Triangle& objectSpaceTriangle : object.GetMesh()->GetTriangles())
 		{
@@ -210,11 +205,18 @@ void Renderer::ScanlineClean(IShader& shader, Vector3f* vertScreen)
 
 	Color color(1.0f, 1.0f, 1.0f);
 	float u, v, w;
-	for (int y = int((min.y)), endY = int((max.y)); y <= endY; ++y)
-		for (int x = int((min.x)), endX = int((max.x)); x <= endX; ++x)
+
+	int xMin = std::max(0, std::min(window->GetWidth(), static_cast<int>(std::floor(min.x))));
+	int yMin = std::max(0, std::min(window->GetHeight(), static_cast<int>(std::floor(min.y))));
+	int xMax = std::max(0, std::min(window->GetWidth(), static_cast<int>(std::floor(max.x))));
+	int yMax = std::max(0, std::min(window->GetHeight(), static_cast<int>(std::floor(max.y))));
+	for (int y = yMin, endY = yMax; y <= endY; ++y)
+		for (int x = xMin, endX = xMax; x <= endX; ++x)
 		{
 			Triangle::Barycentric(vertScreen, Vector3f(float(x + 0.5f), float(y + 0.5f), 0.0f), u, v, w);
-			if (u < 0.0f || v < 0.0f || w < 0.0f) continue;
+			if (!(0.0f <= u && u <= 1.0f 
+			&& 0.0f <= v && v <= 1.0f
+			&& 0.0f <= w && w <= 1.0f)) continue;
 			float Z = u * vertScreen[0].z + v * vertScreen[1].z + w * vertScreen[2].z;
 			float zBufferValue = zBuffer(x, y);
 			if (Z < zBufferValue)

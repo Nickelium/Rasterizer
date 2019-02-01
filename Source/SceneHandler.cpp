@@ -52,6 +52,14 @@ void SceneHandler::BuilScenes()
 	sc = new Scene;
 	sc->AddObject(factory.CreateDiablo());
 	scenes.push_back(sc);
+
+	sc = new Scene;
+	sc->AddObject(factory.CreateBMax());
+	scenes.push_back(sc);
+
+	sc = new Scene;
+	sc->AddObject(factory.CreateChest());
+	scenes.push_back(sc);
 }
 
 void SceneHandler::ChangeScene(bool incrOrder)

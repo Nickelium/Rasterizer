@@ -54,34 +54,32 @@ int Triangle::Size()
 	return 3;
 }
 
-void Triangle::Barycentric(Vector3f* vertices, const Vector3f& P, float& u, float& v, float& w)
+void Triangle::Barycentric(const Vector3f* const vertices, const Vector3f& P, float& u, float& v, float& w)
 {
-	// Dont know why without dot(n) not working
-	Vector3f a = vertices[0];
-	Vector3f b = vertices[1];
-	Vector3f c = vertices[2];
-	Vector3f normal = Cross(b - a, c - a);
+	Vector2f a = { vertices[0].x, vertices[0].y };
+	Vector2f b = { vertices[1].x, vertices[1].y };
+	Vector2f c = { vertices[2].x, vertices[2].y };
+	Vector2f d = { P.x, P.y };
+	
 
-	float areaABC = normal.LengthSquared();
-	float areaPBC = Dot(normal, Cross((P - b), (P - c)));
-	float areaPCA = Dot(normal, Cross((P - c), (P - a)));
+	auto edgeFunction = [](Vector2f A, Vector2f B, Vector2f P)
+	{
+		return Cross(B - A, P - A);
+	};
+
+	float areaABC = edgeFunction(a, b, c);
+	float areaPBC = edgeFunction(b, c, d);
+	float areaPCA = edgeFunction(c, a, d);
+	float areaPAB = edgeFunction(a, b, d);
+
+	//Vector3f normal = Cross(b - a, c - a);
+	//float areaABC = normal.LengthSquared();
+	//float areaPBC = Dot(normal, Cross((P - b), (P - c)));
+	//float areaPCA = Dot(normal, Cross((P - c), (P - a)));
 
 	u = areaPBC / areaABC; // alpha
 	v = areaPCA / areaABC; // beta
 	w = 1.0f - u - v; // gamma
 }
-
-
-
-//Multiply
-//Triangle operator*(const Matrix4f& M, const Triangle& triangle) 
-//{
-//	Triangle transform = triangle;
-//	transform[0] = (M * Vector4f(triangle[0], 1.0f)).DivideW();
-//	transform[1] = (M * Vector4f(triangle[1], 1.0f)).DivideW();
-//	transform[2] = (M * Vector4f(triangle[2], 1.0f)).DivideW();
-//
-//	return transform;
-//}
 
 #pragma endregion

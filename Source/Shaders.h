@@ -26,7 +26,7 @@ public:
 	virtual Vector3f VertexShader(const Triangle& triangle, unsigned int index) override;
 	virtual bool FragmentShader(Vector3f baryInterpolation, Color& output) override;
 
-	virtual void UpdateUniforms(const Matrix4f& M, const Matrix4f& V, const Matrix4f& P, const Matrix4f& S, const Object& object, const LightParam& lightParam, bool useTexture = true) override;
+	virtual void UpdateUniforms(const Matrix4f& M, const Matrix4f& V, const Matrix4f& P, const Matrix4f& S, const Object& object, const LightParam& lightParam) override;
 
 private:
 	virtual Vector3f Process(const Vector4f& vertex) override;
@@ -51,7 +51,7 @@ public:
 	virtual Vector3f VertexShader(const Triangle& triangle, unsigned int index) override;
 	virtual bool FragmentShader(Vector3f baryInterpolation, Color& output) override;
 
-	virtual void UpdateUniforms(const Matrix4f& M, const Matrix4f& V, const Matrix4f& P, const Matrix4f& S, const Object& object, const LightParam& lightParam, bool useTexture = true) override;
+	virtual void UpdateUniforms(const Matrix4f& M, const Matrix4f& V, const Matrix4f& P, const Matrix4f& S, const Object& object, const LightParam& lightParam) override;
 private:
 	virtual Vector3f Process(const Vector4f& vertex) override;
 
@@ -75,7 +75,34 @@ public:
 	virtual Vector3f VertexShader(const Triangle& triangle, unsigned int index) override;
 	virtual bool FragmentShader(Vector3f baryInterpolation, Color& output) override;
 
-	virtual void UpdateUniforms(const Matrix4f& M, const Matrix4f& V, const Matrix4f& P, const Matrix4f& S, const Object& object, const LightParam& lightParam, bool useTexture = true) override;
+	virtual void UpdateUniforms(const Matrix4f& M, const Matrix4f& V, const Matrix4f& P, const Matrix4f& S, const Object& object, const LightParam& lightParam) override;
+private:
+	virtual Vector3f Process(const Vector4f& vertex) override;
+
+	//Uniform variables
+	Matrix4f M, V, P, S;
+	const Object* object;
+
+	LightParam lightParam;
+	bool useTexture;
+
+	//Varying variables
+	Vector3f positions[3];
+	Vector3f normals[3];
+	Vector2f uvs[3];
+};
+
+
+class TexturedShading final : public IShader
+{
+
+public:
+	TexturedShading();
+	virtual ~TexturedShading() override;
+	virtual Vector3f VertexShader(const Triangle& triangle, unsigned int index) override;
+	virtual bool FragmentShader(Vector3f baryInterpolation, Color& output) override;
+
+	virtual void UpdateUniforms(const Matrix4f& M, const Matrix4f& V, const Matrix4f& P, const Matrix4f& S, const Object& object, const LightParam& lightParam) override;
 private:
 	virtual Vector3f Process(const Vector4f& vertex) override;
 
