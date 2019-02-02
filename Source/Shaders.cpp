@@ -58,9 +58,10 @@ Vector3f FlatShading::Process(const Vector4f& vertex)
 	return (S * vertex.DivideW()).GetVec3();
 }
 
-bool FlatShading::FragmentShader(Vector3f baryInterpolation, Color& output)
+bool FlatShading::FragmentShader(Vector3f baryInterpolation, float depth, Color& output)
 {
-	output = color[0];//baryInterpolation.x * color[0] + baryInterpolation.y * color[1] + baryInterpolation.z * color[2];
+	output = Color::Clamp((color[0] + color[1] + color[2]) / 3.0f);
+	//baryInterpolation.x * color[0] + baryInterpolation.y * color[1] + baryInterpolation.z * color[2];
 	return true;
 }
 #pragma endregion 
@@ -127,10 +128,19 @@ Vector3f GouraudShading::Process(const Vector4f& vertex)
 	return (S * vertex.DivideW()).GetVec3();
 }
 
-bool GouraudShading::FragmentShader(Vector3f baryInterpolation, Color& output)
+bool GouraudShading::FragmentShader(Vector3f baryInterpolation, float depth, Color& output)
 {
 	//Attribute Interpolation
-	output = baryInterpolation.x * color[0] + baryInterpolation.y * color[1] + baryInterpolation.z * color[2];
+	output =
+	Color::Clamp
+	(
+		depth * 
+		(
+			baryInterpolation.x * color[0] / depths[0] +
+			baryInterpolation.y * color[1] / depths[1] + 
+			baryInterpolation.z * color[2] / depths[2]
+		)
+	);
 	return true;
 }
 #pragma endregion 
@@ -179,12 +189,32 @@ Vector3f PhongShading::Process(const Vector4f& vertex)
 	return (S * vertex.DivideW()).GetVec3();
 }
 
-bool PhongShading::FragmentShader(Vector3f baryInterpolation, Color& output)
+bool PhongShading::FragmentShader(Vector3f baryInterpolation, float depth, Color& output)
 {
 	//Attribute Interpolation
-	Vector3f position = baryInterpolation.x * positions[0] + baryInterpolation.y * positions[1] + baryInterpolation.z * positions[2];
-	Vector3f normal = (baryInterpolation.x * normals[0] + baryInterpolation.y * normals[1] + baryInterpolation.z * normals[2]).Normalize();
-	Vector2f uv = (baryInterpolation.x * uvs[0] + baryInterpolation.y * uvs[1] + baryInterpolation.z * uvs[2]);
+	Vector3f position =
+	depth *
+	(
+		baryInterpolation.x * positions[0] / depths[0] +
+		baryInterpolation.y * positions[1] / depths[1] +
+		baryInterpolation.z * positions[2] / depths[2]
+	);
+
+	Vector3f normal = 
+	depth *
+	(
+		baryInterpolation.x * normals[0] / depths[0] +
+		baryInterpolation.y * normals[1] / depths[1] +
+		baryInterpolation.z * normals[2] / depths[2]
+	);
+	normal = normal.Normalize();
+	Vector2f uv =
+	depth *
+	(
+		baryInterpolation.x * uvs[0] / depths[0] +
+		baryInterpolation.y * uvs[1] / depths[1] +
+		baryInterpolation.z * uvs[2] / depths[2]
+	);
 
 	//Actual Shader
 	Vector3f lightDir = lightParam.direction;
@@ -206,19 +236,19 @@ bool PhongShading::FragmentShader(Vector3f baryInterpolation, Color& output)
 		specular = 0.6f * specular * object->GetMaterial().specular;
 	Color diffuse = diff * albedo * lightColor;
 
-	output = ambient + diffuse + specular;
+	output = Color::Clamp(ambient + diffuse + specular);
 
 	return true;
 }
 #pragma endregion 
 
 #pragma region texturedShading
-TexturedShading::TexturedShading()
+TexturedShader::TexturedShader()
 	: object(nullptr)
 {
 }
 
-void TexturedShading::UpdateUniforms(const Matrix4f& M, const Matrix4f& V, const  Matrix4f& P, const Matrix4f& S, const Object& object, const LightParam& lightParam)
+void TexturedShader::UpdateUniforms(const Matrix4f& M, const Matrix4f& V, const  Matrix4f& P, const Matrix4f& S, const Object& object, const LightParam& lightParam)
 {
 	this->M = M;
 	this->V = V;
@@ -228,11 +258,11 @@ void TexturedShading::UpdateUniforms(const Matrix4f& M, const Matrix4f& V, const
 	this->lightParam = lightParam;
 }
 
-TexturedShading::~TexturedShading()
+TexturedShader::~TexturedShader()
 {
 }
 
-Vector3f TexturedShading::VertexShader(const Triangle& triangle, unsigned int index)
+Vector3f TexturedShader::VertexShader(const Triangle& triangle, unsigned int index)
 {
 	Vector3f normal = triangle.GetNormals()[index];
 	Matrix4f invTransM = Matrix4f::Transpose(Matrix4f::Inverse(M));
@@ -249,17 +279,42 @@ Vector3f TexturedShading::VertexShader(const Triangle& triangle, unsigned int in
 	return Process(vertexNDC);
 }
 
-Vector3f TexturedShading::Process(const Vector4f& vertex)
+Vector3f TexturedShader::Process(const Vector4f& vertex)
 {
 	return (S * vertex.DivideW()).GetVec3();
 }
 
-bool TexturedShading::FragmentShader(Vector3f baryInterpolation, Color& output)
+bool TexturedShader::FragmentShader(Vector3f baryInterpolation, float depth, Color& output)
 {
 	//Attribute Interpolation
-	Vector3f position = baryInterpolation.x * positions[0] + baryInterpolation.y * positions[1] + baryInterpolation.z * positions[2];
-	Vector3f normal = (baryInterpolation.x * normals[0] + baryInterpolation.y * normals[1] + baryInterpolation.z * normals[2]).Normalize();
-	Vector2f uv = (baryInterpolation.x * uvs[0] + baryInterpolation.y * uvs[1] + baryInterpolation.z * uvs[2]);
+	Vector3f position =
+	depth *
+	(
+		baryInterpolation.x * (positions[0] / depths[0]) +
+		baryInterpolation.y * (positions[1] / depths[1]) +
+		baryInterpolation.z * (positions[2] / depths[2])
+	);
+
+	Vector3f normal =
+	depth *
+	(
+		baryInterpolation.x * (normals[0] / depths[0]) +
+		baryInterpolation.y * (normals[1] / depths[1]) +
+		baryInterpolation.z * (normals[2] / depths[2])
+	);
+	normal = normal.Normalize();
+	Vector2f uv =
+	depth *
+	(
+		baryInterpolation.x * (uvs[0] / depths[0]) +
+		baryInterpolation.y * (uvs[1] / depths[1]) +
+		baryInterpolation.z * (uvs[2] / depths[2])
+	);											 
+
+	//Vector2f uv =
+	//	baryInterpolation.x * uvs[0] +
+	//	baryInterpolation.y * uvs[1] +
+	//	baryInterpolation.z * uvs[2];
 
 	//Actual Shader
 	Vector3f lightDir = lightParam.direction;
@@ -283,8 +338,52 @@ bool TexturedShading::FragmentShader(Vector3f baryInterpolation, Color& output)
 		specular = 0.6f * specular * object->GetMaterial().specular;
 	Color diffuse = diff * albedo * lightColor;
 
-	output = ambient + diffuse + specular;
+	output = Color::Clamp(ambient + diffuse + specular);
 
+	return true;
+}
+#pragma endregion 
+
+
+
+#pragma region DepthShader
+void DepthShader::UpdateUniforms(const Matrix4f& M, const Matrix4f& V, const  Matrix4f& P, const Matrix4f& S, const Object& object, const LightParam& lightParam)
+{
+	this->M = M;
+	this->V = V;
+	this->P = P;
+	this->S = S;
+	this->object = &object;
+	this->lightParam = lightParam;
+}
+
+
+DepthShader::DepthShader()
+	: object(nullptr)
+{
+}
+
+DepthShader::~DepthShader()
+{
+}
+
+Vector3f DepthShader::VertexShader(const Triangle& triangle, unsigned int index)
+{
+	Matrix4f MVP = P * V * M;
+	Vector4f vertexNDC = MVP * Vector4f(triangle[index], 1.0f);
+	return Process(vertexNDC);
+}
+
+Vector3f DepthShader::Process(const Vector4f& vertex)
+{
+	return (S * vertex.DivideW()).GetVec3();
+}
+
+bool DepthShader::FragmentShader(Vector3f baryInterpolation, float depth, Color& output)
+{
+	float value = 1.25f * (1.0f - depth);
+	value = value * value;
+	output = Color::Clamp(Color(value, value, value));
 	return true;
 }
 #pragma endregion 

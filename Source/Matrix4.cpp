@@ -200,12 +200,13 @@ Matrix4f Matrix4f::Perspective(float left, float right, float bottom, float top,
 	return M;
 }
 
-Matrix4f Matrix4f::Perspective(float fov, float aspectRatio, float nearZ, float farZ)
+
+Matrix4f Matrix4f::Perspective(float hFov, float aspectRatio, float nearZ, float farZ)
 {
 	Matrix4f M = Matrix4f::Identity();
-	fov = Maths::Radians(fov);
-	M[0][0] = 1.0f / tan(fov * 0.5f);
-	M[1][1] = (1.0f / tan(fov * 0.5f)) * aspectRatio;
+	hFov = Maths::Radians(hFov);
+	M[0][0] = 1.0f / tan(hFov * 0.5f);
+	M[1][1] = (1.0f / tan(hFov * 0.5f)) * aspectRatio;
 	M[2][2] = -(farZ + nearZ) / (farZ - nearZ);
 	M[2][3] = -(2.0f * farZ * nearZ) / (farZ - nearZ);
 	M[3][2] = -1.0f;

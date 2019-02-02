@@ -12,9 +12,9 @@ const int Color::MAX_VALUEI = 255;
 
 
 Color::Color(float r, float g, float b)
-	:r(ClampValue(r)),
-	g(ClampValue(g)),
-	b(ClampValue(b))
+	:r(r),
+	g(g),
+	b(b)
 {
 }
 
@@ -100,6 +100,11 @@ Color operator/(const Color& c, float f)
 {
 	assert(abs(f) > 10e-5);
 	return c * (1.0f / f);
+}
+
+Color Color::Clamp(const Color& c)
+{
+	return Color(ClampValue(c.r), ClampValue(c.g), ClampValue(c.b));
 }
 
 float Color::ClampValue(float value)

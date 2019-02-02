@@ -42,6 +42,7 @@ private:
 		RM_GOURAUD,
 		RM_PHONG,
 		RM_TEXTURED,
+		RM_DEPTH,
 		RM_NUMBER_MODES
 	} renderMode;
 
@@ -51,6 +52,7 @@ private:
 		ST_GOURAUD,
 		ST_PHONG,
 		ST_TEXTURED,
+		ST_DEPTH,
 		ST_NUMBER_TYPES
 	};
 

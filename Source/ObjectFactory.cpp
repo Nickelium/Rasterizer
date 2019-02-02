@@ -11,7 +11,7 @@ Object ObjectFactory::CreateTriangle() const
 		Color{0.75, 0.75f, 0.75f},
 		Color{1.0, 1.0f, 1.0f},
 		32.0f });
-	object.SetTransform(Transform(Vector3f(0.0f, 0.0f, -5.0f), Vector3f(0.0f, 0.0f, 0.0f)));
+	object.SetTransform(Transform(Vector3f(0.0f, 0.0f, -5.0f), Vector3f(0.0f, 0.0f, 45.0f)));
 	return object; // don't move because of RVO
 }
 
@@ -113,12 +113,12 @@ Object ObjectFactory::CreateBMax() const
 
 Object ObjectFactory::CreateChest() const
 {
-	Object object("chest_mesh.obj", "container.jpg");
+	Object object("chest_mesh.obj", "chest_albedo.png");
 	object.SetMaterial(Material{
 		Color{0.75, 0.75f, 0.75f},
 		Color{0.75, 0.75f, 0.75f},
 		Color{1.0, 1.0f, 1.0f},
 		32.0f });
-	object.SetTransform(Transform(Vector3f(0.0f, -0.0f, -2.0f), Vector3f(0.0f, 0.0f, 0.0f)));
+	object.SetTransform(Transform(Vector3f(0.0f, -0.0f, -3.5f), Vector3f(0.0f, 0.0f, 0.0f)));
 	return object;
 }

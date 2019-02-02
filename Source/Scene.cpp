@@ -22,7 +22,7 @@ void Scene::Update(float dt)
 	for (Object& object : objects)
 	{
 		//object.SetPosition(Vector3f(3.0f * sin(timer.GetTotal()), 0.0f, 0.0f));
-		object.Rotate(Vector3f(0.f, 45.0f * dt, 0.f));
+		object.Rotate(Vector3f(0.f, 15.0f * dt, 0.f));
 		//camera.Move(Vector3f(0.0f, 0.0f, +0.0005f));
 	}
 }

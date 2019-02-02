@@ -18,6 +18,8 @@ struct Color
 
 	static const int MIN_VALUEI;
 	static const int MAX_VALUEI;
+
+	static Color Clamp(const Color& c);
 private:
 	static float ClampValue(float value);
 };

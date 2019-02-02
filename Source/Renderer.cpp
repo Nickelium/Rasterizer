@@ -21,16 +21,17 @@ Renderer::Renderer(Window* window)
 	height(window->GetHeight()),
 	cBuffer(width, height),
 	zBuffer(width, height),
-	backgroundColor(234.0f / Color::MAX_VALUEF,
-					239.0f / Color::MAX_VALUEF,
-					247.0f / Color::MAX_VALUEF),
+	backgroundColor(234.0f / Color::MAX_VALUEI,
+					239.0f / Color::MAX_VALUEI,
+					247.0f / Color::MAX_VALUEI),
 	index(0u),
 	wireframeRender(true)
 {
 	shaders.push_back(new FlatShading());
 	shaders.push_back(new GouraudShading());
 	shaders.push_back(new PhongShading());
-	shaders.push_back(new TexturedShading());
+	shaders.push_back(new TexturedShader());
+	shaders.push_back(new DepthShader());
 
 	ConfigureRenderSettings();
 }
@@ -44,7 +45,7 @@ Renderer::~Renderer()
 void Renderer::Clear()
 {
 	cBuffer.Clear(ColorToInt(backgroundColor));
-	zBuffer.Clear(std::numeric_limits<float>::max());
+	zBuffer.Clear(1.0f);
 }
 
 void Renderer::Finalize()
@@ -76,6 +77,10 @@ void Renderer::ConfigureRenderSettings()
 		wireframeRender = false;
 		shader = shaders[static_cast<unsigned char>(SHADER_TYPES::ST_TEXTURED)];
 		break;
+	case RENDER_MODE::RM_DEPTH:
+		wireframeRender = false;
+		shader = shaders[static_cast<unsigned char>(SHADER_TYPES::ST_DEPTH)];
+		break;
 	default:
 		break;
 	}
@@ -83,10 +88,10 @@ void Renderer::ConfigureRenderSettings()
 
 void Renderer::Render(Scene& scene)
 {
-	Clear();
 
+	Clear();
 	Matrix4f V = scene.GetCamera().GetViewMatrix();
-	Matrix4f P = Matrix4f::Perspective(60.0f, float(width) / height, 0.1f, 100.0f);
+	Matrix4f P = Matrix4f::Perspective(60.0f, float(width) / height, 1.0f, 100.0f);
 	Matrix4f S = Matrix4f::Viewport(width, height);
 	LightParam lightInfo;
 	lightInfo.direction = Vector3f(1.0f, 1.0f, 1.0f).Normalize();
@@ -117,14 +122,17 @@ void Renderer::Render(Scene& scene)
 				Vector3f normal = Cross(vertices[1] - vertices[0], vertices[2] - vertices[0]);
 				bool backfaceCulling = normal.z < 0;
 				if (backfaceCulling)
-						continue;
+					continue;
+				{
+					float depths[3] = { vertices[0].z, vertices[1].z, vertices[2].z };
+					shader->StoreDepthValues(depths);
+				}
 				//ScanlineFast(*shader, vertices);
 				ScanlineClean(*shader, vertices);
 			}
 			
 		}
 	}
-
 	Finalize();
 }
 
@@ -210,19 +218,11 @@ void Renderer::ScanlineClean(IShader& shader, Vector3f* vertScreen)
 	Color color(1.0f, 1.0f, 1.0f);
 	float u, v, w;
 
-	auto isEdge = [](float w)
-	{
-		return std::abs(w) < 10e-6;
-	};
-	auto isTopBottom = [](Vector3f edge)
-	{
-		return edge.y < 0.0f || (std::abs(edge.y) < 10e-4 && edge.x < 0.0f);
-	};
-
 	int xMin = std::max(0, std::min(window->GetWidth(), static_cast<int>(std::floor(min.x))));
 	int yMin = std::max(0, std::min(window->GetHeight(), static_cast<int>(std::floor(min.y))));
-	int xMax = std::max(0, std::min(window->GetWidth(), static_cast<int>(std::floor(max.x))));
+ 	int xMax = std::max(0, std::min(window->GetWidth(), static_cast<int>(std::floor(max.x))));
 	int yMax = std::max(0, std::min(window->GetHeight(), static_cast<int>(std::floor(max.y))));
+	int count = 0;
 	for (int y = yMin, endY = yMax; y <= endY; ++y)
 		for (int x = xMin, endX = xMax; x <= endX; ++x)
 		{
@@ -230,19 +230,15 @@ void Renderer::ScanlineClean(IShader& shader, Vector3f* vertScreen)
 			if (!(0.0f <= u && u <= 1.0f 
 			&& 0.0f <= v && v <= 1.0f
 			&& 0.0f <= w && w <= 1.0f)) continue;
-			if (isEdge(u) && !isTopBottom(edge0)) 
-				continue;
-			if (isEdge(v) && !isTopBottom(edge1)) 
-				continue;
-			if (isEdge(w) && !isTopBottom(edge2)) 
-				continue;
-
-			float Z = u * vertScreen[0].z + v * vertScreen[1].z + w * vertScreen[2].z;
+			
+			float Z = 1.0f / (u * (1.0f / vertScreen[0].z) + v * (1.0f / vertScreen[1].z) + w * (1.0f / vertScreen[2].z));
+			//float Z = 1.0f / zInv;
+			float Zlin = u * vertScreen[0].z + v * vertScreen[1].z + w * vertScreen[2].z;
 			float zBufferValue = zBuffer(x, y);
 			if (Z < zBufferValue)
 			{
 				zBuffer(x, y) = Z;
-				shader.FragmentShader(Vector3f(u, v, w), color);
+				shader.FragmentShader(Vector3f(u, v, w), Z, color);
 				cBuffer(x, y) = ColorToInt(color);
 			}
 		}
@@ -282,7 +278,7 @@ void Renderer::ScanlineFast(IShader& shader, Vector3f* vertices)
 			if (Z < zBufferValue)
 			{
 				zBuffer(x, y) = Z;
-				shader.FragmentShader(Vector3f(u, v, w), color);
+				shader.FragmentShader(Vector3f(u, v, w), Z, color);
 				cBuffer(x, y) = ColorToInt(color);
 			}
 		}
@@ -311,7 +307,7 @@ void Renderer::ScanlineFast(IShader& shader, Vector3f* vertices)
 			if (Z < zBufferValue)
 			{
 				zBuffer(x, y) = Z;
-				shader.FragmentShader(Vector3f(u, v, w), color);
+				shader.FragmentShader(Vector3f(u, v, w), Z, color);
 				cBuffer(x, y) = ColorToInt(color);
 			}
 		}
