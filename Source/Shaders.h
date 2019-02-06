@@ -23,13 +23,13 @@ class FlatShading final : public IShader
 public:
 	FlatShading();
 	virtual ~FlatShading() override;
-	virtual Vector3f VertexShader(const Triangle& triangle, unsigned int index) override;
+	virtual bool VertexShader(const Triangle& triangle, unsigned int index, Vector3f& out) override;
 	virtual bool FragmentShader(Vector3f baryInterpolation, float depth, Color& output) override;
 
 	virtual void UpdateUniforms(const Matrix4f& M, const Matrix4f& V, const Matrix4f& P, const Matrix4f& S, const Object& object, const LightParam& lightParam) override;
 
 private:
-	virtual Vector3f Process(const Vector4f& vertex) override;
+	virtual bool ClipAndProcess(const Vector4f& vertex, Vector3f& out) override;
 
 	//Uniform variables
 	Matrix4f M, V, P, S;
@@ -48,12 +48,12 @@ class GouraudShading final : public IShader
 public:
 	GouraudShading();
 	virtual ~GouraudShading() override;
-	virtual Vector3f VertexShader(const Triangle& triangle, unsigned int index) override;
+	virtual bool VertexShader(const Triangle& triangle, unsigned int index, Vector3f& out) override;
 	virtual bool FragmentShader(Vector3f baryInterpolation, float depth, Color& output) override;
 
 	virtual void UpdateUniforms(const Matrix4f& M, const Matrix4f& V, const Matrix4f& P, const Matrix4f& S, const Object& object, const LightParam& lightParam) override;
 private:
-	virtual Vector3f Process(const Vector4f& vertex) override;
+	virtual bool ClipAndProcess(const Vector4f& vertex, Vector3f& out) override;
 
 	//Uniform variables
 	Matrix4f M, V, P, S;
@@ -73,12 +73,12 @@ class PhongShading final : public IShader
 public:
 	PhongShading();
 	virtual ~PhongShading() override;
-	virtual Vector3f VertexShader(const Triangle& triangle, unsigned int index) override;
+	virtual bool VertexShader(const Triangle& triangle, unsigned int index, Vector3f& out) override;
 	virtual bool FragmentShader(Vector3f baryInterpolation, float depth, Color& output) override;
 
 	virtual void UpdateUniforms(const Matrix4f& M, const Matrix4f& V, const Matrix4f& P, const Matrix4f& S, const Object& object, const LightParam& lightParam) override;
 private:
-	virtual Vector3f Process(const Vector4f& vertex) override;
+	virtual bool ClipAndProcess(const Vector4f& vertex, Vector3f& out) override;
 
 	//Uniform variables
 	Matrix4f M, V, P, S;
@@ -100,12 +100,12 @@ class TexturedShader final : public IShader
 public:
 	TexturedShader();
 	virtual ~TexturedShader() override;
-	virtual Vector3f VertexShader(const Triangle& triangle, unsigned int index) override;
+	virtual bool VertexShader(const Triangle& triangle, unsigned int index, Vector3f& out) override;
 	virtual bool FragmentShader(Vector3f baryInterpolation, float depth, Color& output) override;
 
 	virtual void UpdateUniforms(const Matrix4f& M, const Matrix4f& V, const Matrix4f& P, const Matrix4f& S, const Object& object, const LightParam& lightParam) override;
 private:
-	virtual Vector3f Process(const Vector4f& vertex) override;
+	virtual bool ClipAndProcess(const Vector4f& vertex, Vector3f& out) override;
 
 	//Uniform variables
 	Matrix4f M, V, P, S;
@@ -126,13 +126,13 @@ class DepthShader final : public IShader
 public:
 	DepthShader();
 	virtual ~DepthShader() override;
-	virtual Vector3f VertexShader(const Triangle& triangle, unsigned int index) override;
+	virtual bool VertexShader(const Triangle& triangle, unsigned int index, Vector3f& out) override;
 	virtual bool FragmentShader(Vector3f baryInterpolation, float depth, Color& output) override;
 
 	virtual void UpdateUniforms(const Matrix4f& M, const Matrix4f& V, const Matrix4f& P, const Matrix4f& S, const Object& object, const LightParam& lightParam) override;
 
 private:
-	virtual Vector3f Process(const Vector4f& vertex) override;
+	virtual bool ClipAndProcess(const Vector4f& vertex, Vector3f& out) override;
 
 	//Uniform variables
 	Matrix4f M, V, P, S;

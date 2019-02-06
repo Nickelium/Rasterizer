@@ -23,7 +23,6 @@ void Scene::Update(float dt)
 	{
 		//object.SetPosition(Vector3f(3.0f * sin(timer.GetTotal()), 0.0f, 0.0f));
 		object.Rotate(Vector3f(0.f, 15.0f * dt, 0.f));
-		//camera.Move(Vector3f(0.0f, 0.0f, +0.0005f));
 	}
 }
 
@@ -34,6 +33,6 @@ Camera& Scene::GetCamera()
 
 void Scene::BuildScene()
 {
-	camera.Move(Vector3f(0.0f, 0.0f, 0.0f));
+	camera.SetTransform(Transform(Vector3f(0.0f, 0.5f, 0.0f), Vector3f(-10.0f, 0.0f, 0.0f)));	
 }
 

@@ -54,11 +54,23 @@ void SceneHandler::BuilScenes()
 	scenes.push_back(sc);
 
 	sc = new Scene;
-	sc->AddObject(factory.CreateBMax());
+	sc->AddObject(factory.CreateHelmet());
 	scenes.push_back(sc);
 
 	sc = new Scene;
-	sc->AddObject(factory.CreateChest());
+	sc->AddObject(factory.CreateIllidan());
+	scenes.push_back(sc);
+
+	sc = new Scene;
+	sc->AddObject(factory.CreateCar());
+	scenes.push_back(sc);
+
+	sc = new Scene;
+	sc->AddObject(factory.CreateGuitar());
+	scenes.push_back(sc);
+
+	sc = new Scene;
+	sc->AddObject(factory.CreateWeapon());
 	scenes.push_back(sc);
 }
 

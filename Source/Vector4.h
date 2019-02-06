@@ -92,7 +92,6 @@ Vec3<T> Vec4<T>::GetVec3() const
 template <class T>
 Vec4<T> Vec4<T>::DivideW() const
 {
-	assert(abs(w) > 10e-5 && "Divide w is zero\n");
 	float invW = 1.0f / w;
 	return Vec4<T>(x * invW, y * invW, z * invW, 1.0f);
 }

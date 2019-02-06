@@ -16,9 +16,9 @@
 
 Renderer::Renderer(Window* window)
 	:renderMode(RENDER_MODE::RM_WIREFRAME),
-	window(window),
 	width(window->GetWidth()),
 	height(window->GetHeight()),
+	window(window),
 	cBuffer(width, height),
 	zBuffer(width, height),
 	backgroundColor(234.0f / Color::MAX_VALUEI,
@@ -91,7 +91,7 @@ void Renderer::Render(Scene& scene)
 
 	Clear();
 	Matrix4f V = scene.GetCamera().GetViewMatrix();
-	Matrix4f P = Matrix4f::Perspective(60.0f, float(width) / height, 1.0f, 100.0f);
+	Matrix4f P = Matrix4f::Perspective(60.0f, float(width) / height, 1.0f, 200.0f);
 	Matrix4f S = Matrix4f::Viewport(width, height);
 	LightParam lightInfo;
 	lightInfo.direction = Vector3f(1.0f, 1.0f, 1.0f).Normalize();
@@ -114,7 +114,11 @@ void Renderer::Render(Scene& scene)
 		{
 			Vector3f vertices[3];
 			for (int i = 0; i < 3; ++i)
-				vertices[i] = shader->VertexShader(objectSpaceTriangle, i);
+			{
+				bool clip = shader->VertexShader(objectSpaceTriangle, i, vertices[i]);
+				if (clip)
+					goto outerloopEnd;
+			}
 			if(wireframeRender)
 				DrawTriangle(Triangle(vertices[0], vertices[1], vertices[2]));
 			else
@@ -131,6 +135,7 @@ void Renderer::Render(Scene& scene)
 				ScanlineClean(*shader, vertices);
 			}
 			
+		outerloopEnd:;
 		}
 	}
 	Finalize();
@@ -182,9 +187,9 @@ void Renderer::DrawLine(Vector2i p0, Vector2i p1)
 	for ( pi.x = p0.x; pi.x < p1.x; ++pi.x)
 	{
 		if (!steep)
-			cBuffer(pi.x, pi.y) = ColorToInt(color);
+			cBuffer.SetElement(pi.x, pi.y, ColorToInt(color));
 		else
-			cBuffer(pi.y, pi.x) = ColorToInt(color);
+			cBuffer.SetElement(pi.y, pi.x, ColorToInt(color));
 
 		totalError += error;
 		if (abs(totalError) > dx)
@@ -237,9 +242,9 @@ void Renderer::ScanlineClean(IShader& shader, Vector3f* vertScreen)
 			float zBufferValue = zBuffer(x, y);
 			if (Z < zBufferValue)
 			{
-				zBuffer(x, y) = Z;
+				zBuffer.SetElement(x, y, Z);
 				shader.FragmentShader(Vector3f(u, v, w), Z, color);
-				cBuffer(x, y) = ColorToInt(color);
+				cBuffer.SetElement(x, y, ColorToInt(color));
 			}
 		}
 }

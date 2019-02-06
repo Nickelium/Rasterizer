@@ -30,3 +30,4 @@ Color Texture::GetColor(float u, float v) const
 		invMaxValue * image[(x + y * width) * comp + 1],
 		invMaxValue * image[(x + y * width) * comp + 2]);
 }
+

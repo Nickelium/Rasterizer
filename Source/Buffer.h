@@ -29,8 +29,8 @@ public:
 
 	void SetElement(int i, int j, T value)
 	{
-		assert(0 <= i && i < width && "Out of buffer range width");
-		assert(0 <= j && j < height && "Out of buffer range height");
+		if(!(0 <= i && i < width)) return;
+		if(!(0 <= j && j < height)) return;
 
 		buffer[(height - 1 - j) * width + i] = value;
 	}

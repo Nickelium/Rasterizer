@@ -11,7 +11,7 @@ class IShader
 {
 public:
 	virtual ~IShader() {}
-	virtual Vector3f VertexShader(const Triangle& triangle, unsigned int index) = 0;
+	virtual bool VertexShader(const Triangle& triangle, unsigned int index, Vector3f& out) = 0;
 	virtual bool FragmentShader(Vector3f baryInterpolation, float depth, Color& output) = 0;
 
 	virtual void UpdateUniforms(const Matrix4f& M, const Matrix4f& V, const Matrix4f& P, const Matrix4f& S, const Object& object, const LightParam& lightParam) = 0;
@@ -22,6 +22,6 @@ public:
 			this->depths[i] = depths[i];
 	}
 protected:
-	virtual Vector3f Process(const Vector4f& vertex) = 0;
+	virtual bool ClipAndProcess(const Vector4f& vertex, Vector3f& out) = 0;
 	float depths[3];
 };

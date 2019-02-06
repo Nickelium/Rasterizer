@@ -19,7 +19,7 @@ public:
 		const char* textureName = nullptr, 
 		const char* specularMap = nullptr,
 		const char* normapMap = nullptr);
-	Object(Object&& other);
+	Object(Object&& other) noexcept;
 	~Object();
 
 	Mesh* GetMesh() const;
@@ -30,6 +30,8 @@ public:
 	Material GetMaterial() const;
 	Transform GetTransform() const;
 
+	bool BackFaceCulling() const;
+
 	void SetMaterial(const Material& transform);
 	void SetTransform(const Transform& transform);
 
@@ -38,6 +40,8 @@ public:
 	void Move(const Vector3f& dR);
 	void Rotate(const Vector3f& dR);
 	void Scale(const Vector3f& dR);
+
+	void SetBackFaceCulling(bool backfaceCulling);
 private:
 	Mesh* mesh;
 	Texture* texture;
@@ -47,4 +51,6 @@ private:
 	Material material;
 
 	Transform transform;
+
+	bool backFaceCulling;
 };

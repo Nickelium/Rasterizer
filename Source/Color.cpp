@@ -98,7 +98,6 @@ Color operator*(float f, const Color& c)
 
 Color operator/(const Color& c, float f)
 {
-	assert(abs(f) > 10e-5);
 	return c * (1.0f / f);
 }
 

@@ -26,7 +26,7 @@ FlatShading::~FlatShading()
 {
 }
 
-Vector3f FlatShading::VertexShader(const Triangle& triangle, unsigned int index)
+bool FlatShading::VertexShader(const Triangle& triangle, unsigned int index, Vector3f& out)
 {
 	Vector3f lightDir = lightParam.direction;
 	Color lightColor = lightParam.diffuseColor;
@@ -50,18 +50,23 @@ Vector3f FlatShading::VertexShader(const Triangle& triangle, unsigned int index)
 
 	Matrix4f MVP = P * V * M;
 	Vector4f vertexNDC = MVP  * Vector4f(triangle[index], 1.0f);
-	return Process(vertexNDC);
+	bool clip = ClipAndProcess(vertexNDC, out);
+	return clip;
 }
 
-Vector3f FlatShading::Process(const Vector4f& vertex)
+bool FlatShading::ClipAndProcess(const Vector4f& vertex, Vector3f& out)
 {
-	return (S * vertex.DivideW()).GetVec3();
+ 	out =  (S * vertex.DivideW()).GetVec3();
+	return 
+	!(
+		(-vertex.w <= vertex.x && vertex.x <= vertex.w) &&
+		(-vertex.w <= vertex.y && vertex.y <= vertex.w) &&
+		(-vertex.w <= vertex.z && vertex.z <= vertex.w));
 }
 
 bool FlatShading::FragmentShader(Vector3f baryInterpolation, float depth, Color& output)
 {
 	output = Color::Clamp((color[0] + color[1] + color[2]) / 3.0f);
-	//baryInterpolation.x * color[0] + baryInterpolation.y * color[1] + baryInterpolation.z * color[2];
 	return true;
 }
 #pragma endregion 
@@ -88,7 +93,7 @@ GouraudShading::~GouraudShading()
 {
 }
 
-Vector3f GouraudShading::VertexShader(const Triangle& triangle, unsigned int index)
+bool GouraudShading::VertexShader(const Triangle& triangle, unsigned int index, Vector3f& out)
 {
 	Vector3f lightDir = lightParam.direction;
 	Color lightColor = lightParam.diffuseColor;
@@ -111,7 +116,7 @@ Vector3f GouraudShading::VertexShader(const Triangle& triangle, unsigned int ind
 	Vector3f eyePosition = Vector3f(V[3][0], V[3][1], V[3][2]);
 	Vector3f eyeDirection = (eyePosition - worldPosition).Normalize();
 	Vector3f reflectDirection = -lightDir - 2.0f * Dot(-lightDir, normalWorld) * normalWorld;
-	float spec = pow(std::max(0.0f, Dot(-reflectDirection, eyeDirection)), object->GetMaterial().shininess);
+	float spec = pow(std::max(0.0f, Dot(reflectDirection, eyeDirection)), object->GetMaterial().shininess);
 	Color specular = object->GetMaterial().specular * spec * lightParam.specularColor;
 
 	Color diffuse = diff * albedo * lightColor;
@@ -120,12 +125,18 @@ Vector3f GouraudShading::VertexShader(const Triangle& triangle, unsigned int ind
 
 	Matrix4f MVP = P * V * M;
 	Vector4f vertexNDC = MVP * Vector4f(triangle[index], 1.0f);
-	return Process(vertexNDC);
+	bool clip = ClipAndProcess(vertexNDC, out);
+	return clip;
 }
 
-Vector3f GouraudShading::Process(const Vector4f& vertex)
+bool GouraudShading::ClipAndProcess(const Vector4f& vertex, Vector3f& out)
 {
-	return (S * vertex.DivideW()).GetVec3();
+	out = (S * vertex.DivideW()).GetVec3();
+	return
+		!(
+		(-vertex.w <= vertex.x && vertex.x <= vertex.w) &&
+			(-vertex.w <= vertex.y && vertex.y <= vertex.w) &&
+			(-vertex.w <= vertex.z && vertex.z <= vertex.w));
 }
 
 bool GouraudShading::FragmentShader(Vector3f baryInterpolation, float depth, Color& output)
@@ -167,7 +178,7 @@ PhongShading::~PhongShading()
 {
 }
 
-Vector3f PhongShading::VertexShader(const Triangle& triangle, unsigned int index)
+bool PhongShading::VertexShader(const Triangle& triangle, unsigned int index, Vector3f& out)
 {
 	Vector3f normal = triangle.GetNormals()[index];
 	Matrix4f invTransM = Matrix4f::Transpose(Matrix4f::Inverse(M));
@@ -181,12 +192,18 @@ Vector3f PhongShading::VertexShader(const Triangle& triangle, unsigned int index
 
 	Matrix4f MVP = P * V * M;
 	Vector4f vertexNDC = MVP * Vector4f(triangle[index], 1.0f);
-	return Process(vertexNDC);
+	bool clip = ClipAndProcess(vertexNDC, out);
+	return clip;
 }
 
-Vector3f PhongShading::Process(const Vector4f& vertex)
+bool PhongShading::ClipAndProcess(const Vector4f& vertex, Vector3f& out)
 {
-	return (S * vertex.DivideW()).GetVec3();
+	out = (S * vertex.DivideW()).GetVec3();
+	return
+		!(
+		(-vertex.w <= vertex.x && vertex.x <= vertex.w) &&
+			(-vertex.w <= vertex.y && vertex.y <= vertex.w) &&
+			(-vertex.w <= vertex.z && vertex.z <= vertex.w));
 }
 
 bool PhongShading::FragmentShader(Vector3f baryInterpolation, float depth, Color& output)
@@ -228,7 +245,7 @@ bool PhongShading::FragmentShader(Vector3f baryInterpolation, float depth, Color
 	Vector3f eyePosition = Vector3f(V[3][0], V[3][1], V[3][2]);
 	Vector3f eyeDirection = (eyePosition - position).Normalize();
 	Vector3f reflectDirection = -lightDir + 2.0f * Dot(lightDir, normal) * normal;
-	float spec = pow(std::max(0.0f, Dot(-reflectDirection, eyeDirection)), object->GetMaterial().shininess);
+	float spec = pow(std::max(0.0f, Dot(reflectDirection, eyeDirection)), object->GetMaterial().shininess);
 	Color specular = spec * lightParam.specularColor;
 	if (useTexture && object->GetSpecularMap())
 		specular = 0.6f * specular * object->GetSpecularMap()->GetColor(uv.x, uv.y);
@@ -262,7 +279,7 @@ TexturedShader::~TexturedShader()
 {
 }
 
-Vector3f TexturedShader::VertexShader(const Triangle& triangle, unsigned int index)
+bool TexturedShader::VertexShader(const Triangle& triangle, unsigned int index, Vector3f& out)
 {
 	Vector3f normal = triangle.GetNormals()[index];
 	Matrix4f invTransM = Matrix4f::Transpose(Matrix4f::Inverse(M));
@@ -276,12 +293,18 @@ Vector3f TexturedShader::VertexShader(const Triangle& triangle, unsigned int ind
 
 	Matrix4f MVP = P * V * M;
 	Vector4f vertexNDC = MVP * Vector4f(triangle[index], 1.0f);
-	return Process(vertexNDC);
+	bool clip = ClipAndProcess(vertexNDC, out);
+	return clip;
 }
 
-Vector3f TexturedShader::Process(const Vector4f& vertex)
+bool TexturedShader::ClipAndProcess(const Vector4f& vertex, Vector3f& out)
 {
-	return (S * vertex.DivideW()).GetVec3();
+	out = (S * vertex.DivideW()).GetVec3();
+	return
+		!(
+		(-vertex.w <= vertex.x && vertex.x <= vertex.w) &&
+			(-vertex.w <= vertex.y && vertex.y <= vertex.w) &&
+			(-vertex.w <= vertex.z && vertex.z <= vertex.w));
 }
 
 bool TexturedShader::FragmentShader(Vector3f baryInterpolation, float depth, Color& output)
@@ -311,10 +334,9 @@ bool TexturedShader::FragmentShader(Vector3f baryInterpolation, float depth, Col
 		baryInterpolation.z * (uvs[2] / depths[2])
 	);											 
 
-	//Vector2f uv =
-	//	baryInterpolation.x * uvs[0] +
-	//	baryInterpolation.y * uvs[1] +
-	//	baryInterpolation.z * uvs[2];
+	uv.x = Maths::Clamp(0.0f, 1.0f, uv.x);
+	uv.y = Maths::Clamp(0.0f, 1.0f, uv.y);
+	
 
 	//Actual Shader
 	Vector3f lightDir = lightParam.direction;
@@ -330,7 +352,7 @@ bool TexturedShader::FragmentShader(Vector3f baryInterpolation, float depth, Col
 	Vector3f eyePosition = Vector3f(V[3][0], V[3][1], V[3][2]);
 	Vector3f eyeDirection = (eyePosition - position).Normalize();
 	Vector3f reflectDirection = -lightDir + 2.0f * Dot(lightDir, normal) * normal;
-	float spec = pow(std::max(0.0f, Dot(-reflectDirection, eyeDirection)), object->GetMaterial().shininess);
+	float spec = pow(std::max(0.0f, Dot(reflectDirection, eyeDirection)), object->GetMaterial().shininess);
 	Color specular = spec * lightParam.specularColor;
 	if (useTexture && object->GetSpecularMap())
 		specular = 0.6f * specular * object->GetSpecularMap()->GetColor(uv.x, uv.y);
@@ -367,16 +389,22 @@ DepthShader::~DepthShader()
 {
 }
 
-Vector3f DepthShader::VertexShader(const Triangle& triangle, unsigned int index)
+bool DepthShader::VertexShader(const Triangle& triangle, unsigned int index, Vector3f& out)
 {
 	Matrix4f MVP = P * V * M;
 	Vector4f vertexNDC = MVP * Vector4f(triangle[index], 1.0f);
-	return Process(vertexNDC);
+	bool clip = ClipAndProcess(vertexNDC, out);
+	return clip;
 }
 
-Vector3f DepthShader::Process(const Vector4f& vertex)
+bool DepthShader::ClipAndProcess(const Vector4f& vertex, Vector3f& out)
 {
-	return (S * vertex.DivideW()).GetVec3();
+	out = (S * vertex.DivideW()).GetVec3();
+	return
+		!(
+		(-vertex.w <= vertex.x && vertex.x <= vertex.w) &&
+			(-vertex.w <= vertex.y && vertex.y <= vertex.w) &&
+			(-vertex.w <= vertex.z && vertex.z <= vertex.w));
 }
 
 bool DepthShader::FragmentShader(Vector3f baryInterpolation, float depth, Color& output)

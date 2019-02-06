@@ -2,18 +2,19 @@
 #include "Mesh.h"
 
 
-Object::Object(const char* fileName, 
+Object::Object(const char* fileName,
 	const char* textureName,
 	const char* specularMap,
 	const char* normalMap)
 	: mesh(new Mesh(fileName)),
 	texture(textureName ? new Texture(textureName) : nullptr),
 	specularMap(specularMap ? new Texture(specularMap) : nullptr),
-	normalMap(normalMap ? new Texture(normalMap) : nullptr)
+	normalMap(normalMap ? new Texture(normalMap) : nullptr),
+	backFaceCulling(true)
 {
 }
 
-Object::Object(Object&& other)
+Object::Object(Object&& other) noexcept
 	: mesh(other.mesh),
 	texture(other.texture),
 	specularMap(other.specularMap),
@@ -65,6 +66,11 @@ Transform Object::GetTransform() const
 	return transform;
 }
 
+bool Object::BackFaceCulling() const
+{
+	return backFaceCulling;
+}
+
 void Object::SetMaterial(const Material& material)
 {
 	this->material = material;
@@ -93,4 +99,9 @@ void Object::Rotate(const Vector3f& dR)
 void Object::Scale(const Vector3f& dR)
 {
 	transform.scale += dR;
+}
+
+void Object::SetBackFaceCulling(bool backfaceCulling)
+{
+	this->backFaceCulling = backfaceCulling;
 }

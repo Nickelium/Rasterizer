@@ -14,8 +14,11 @@ public:
 	Object CreateEyesInner() const;
 	Object CreateEyesOuter() const;
 	Object CreateDiablo() const;
-	Object CreateBMax() const;
-	Object CreateChest() const;
+	Object CreateHelmet() const;
+	Object CreateIllidan () const;
+	Object CreateCar() const;
+	Object CreateGuitar() const;
+	Object CreateWeapon() const;
 };
 
 
