@@ -88,7 +88,9 @@ Normals and texture coordinates are required in the mesh models.
     <img width="49%" src="https://raw.githubusercontent.com/Nickelium/Rasterizer/master/Output/22.png">
     <img width="49%" src="https://raw.githubusercontent.com/Nickelium/Rasterizer/master/Output/16.png">
     <img width="49%" src="https://raw.githubusercontent.com/Nickelium/Rasterizer/master/Output/19.png">
-</p>                                                                 
+</p>           
+
+https://www.youtube.com/watch?v=7sPPdtgjI90
       
 ## References Litterature
 * [Scratch A Pixel](https://www.scratchapixel.com/)
