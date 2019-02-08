@@ -1,4 +1,4 @@
-# CPU Rasterizer
+# Realtime CPU Rasterizer/Renderer
 
 This is a simple a realtime software renderer that emulates the OpenGL graphics pipeline. 
 It utilizes few dependencies and is built mostly from scratch and written in C++98/C++11. 
@@ -17,12 +17,14 @@ Therefore it doesn't utilize any hardware acceleration provided by the GPU.
 * OBJ file parser
 * JSON file to describe scenes 
 
-## BackEnd Features:
+## Back End Features:
 * Backface culling
 * Depth Buffering
 * Perspective correct interpolation
 * Extendable vertex and fragment shaders
 * Linear Algebra library 
+* Rasterizer
+* Line Rendering
 
 ## Dependencies:
 * SDL2 : Window context and to pass color buffer
@@ -69,17 +71,25 @@ Once the scene description filled in, the program can be started.
 Use the arrow keys (left and right) to switch between the different scenes. 
 The spacebar on the other hand will switch between the different render modes and shaders.
 
-Notes:
+## Notes:
 The renderer in it current state has very little optimizations because it was first intended to get things working.
 As consequence the renderer might have a hard time to keep a decent framerate when provided with a high poly count. 
 Optimizations are definetely on my todo list.
 mtl files are currently not supported.
 Normals and texture coordinates are required in the mesh model.
 
+## Render Samples
+<p float="left">                                                   
+    <img width="49%" src="https://raw.githubusercontent.com/Nickelium/Rasterizer/master/Output/21.png">
+    <img width="49%" src="https://raw.githubusercontent.com/Nickelium/Rasterizer/master/Output/22.png">
+    <img width="49%" src="https://raw.githubusercontent.com/Nickelium/Rasterizer/master/Output/16.png">
+    <img width="49%" src="https://raw.githubusercontent.com/Nickelium/Rasterizer/master/Output/19.png">
+</p>                                                                 
+      
 ## References Litterature:
-* https://www.scratchapixel.com/
-* https://github.com/ssloy/tinyrenderer/wiki
-* https://learnopengl.com/
+* [Scratch A Pixel](https://www.scratchapixel.com/)
+* [Tiny Renderer](https://github.com/ssloy/tinyrenderer/wiki)
+* [Leanrn OpenGL](https://learnopengl.com/)
 
 ## Reference Models and Textures:
 * Utah Teapot, The University of Utah
