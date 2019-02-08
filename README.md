@@ -6,7 +6,7 @@ The goal of this project is to build a renderer without the help of any Graphics
 Therefore it doesn't utilize any hardware acceleration provided by the GPU.
 
 <p float="left">                                                   
-    <img width="49%" src="https://raw.githubusercontent.com/Nickelium/Rasterizer/master/Output/26.png">
+    <img width="99%" src="https://raw.githubusercontent.com/Nickelium/Rasterizer/master/Output/26.png">
 </p> 
 
 ## Features
@@ -37,35 +37,36 @@ Therefore it doesn't utilize any hardware acceleration provided by the GPU.
 ## Getting Started
 The JSON file config.json, located in the directory Resources, allows the user to describe one or multiple scenes and objects.
 The scene description file should follow the format below:
-{
-	"myscene_name":
+
 	{
-	  "myobject_name":
-	  {
-		  "model": "mypathto/myobjectmodel.obj",
-		  "diffusemap": "mypathto/mytexture.png",
-		  "material":
+		"myscene_name":
+		{
+		  "myobject_name":
 		  {
-			"ambient": [0.15, 0.55, 0.85],
-			"diffuse": [0.55, 0.12, 0.23],
-			"specular": [1.0, 1.0, 1.0],
-			"exponent": 20.0
+			  "model": "mypathto/myobjectmodel.obj",
+			  "diffusemap": "mypathto/mytexture.png",
+			  "material":
+			  {
+				"ambient": [0.15, 0.55, 0.85],
+				"diffuse": [0.55, 0.12, 0.23],
+				"specular": [1.0, 1.0, 1.0],
+				"exponent": 20.0
+			  },
+			  "transform":
+			  {
+				"position": [0.0, -0.75, -10.0],
+				"rotation": [0.0, 0.0, 45.0],
+				"scale": [1.5, 1.5, 1.5]
+			  }
 		  },
-		  "transform":
-		  {
-			"position": [0.0, -0.75, -10.0],
-			"rotation": [0.0, 0.0, 45.0],
-			"scale": [1.5, 1.5, 1.5]
-		  }
-	  },
-	  
-	  ... more objects
-	  
-	},
-	
-	... more scenes
-	
-}
+		  
+		  ... more objects
+		  
+		},
+		
+		... more scenes
+		
+	}
 
 In the same directory, there is already a filled config file which can be used as an example. 
 Currently only triangulated obj models are supported and for textures JPG, PNG, TGA, BMP, PSD, GIF, HDR, PIC (stbi_image).
