@@ -1,11 +1,18 @@
 ﻿#pragma once
 #include <cstdint>
 #include <vector>
-#include "ObjectFactory.h"
+#include "SceneParser.h"
 
 
 class Scene;
 
+/*
+ * Class SceneHandler
+ * 
+ * - Provides communication with the scenes it contains
+ * - Will create specific scenes
+ * TODO: Scenes are still hard coded 
+ */
 class SceneHandler
 {
 public:
@@ -26,5 +33,5 @@ private:
 	int activeSceneID;
 	std::vector<Scene*> scenes;
 
-	ObjectFactory factory;
+	SceneParser parser;
 };

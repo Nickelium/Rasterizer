@@ -2,10 +2,18 @@
 #include "IShader.h"
 #include "Maths.h"
 #include "Color.h"
-
 #include "Object.h"
-
 class Matrix4f;
+
+/*
+ * Files contains all different shader implementations
+ * 
+ * - FlatShading
+ * - GouraudShading
+ * - PhongShading
+ * - PhongShading with textures
+ * - DepthShading (display depth value)
+ */
 
 struct LightParam
 {

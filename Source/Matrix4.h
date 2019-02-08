@@ -4,6 +4,17 @@
 #include "Vector3.h"
 #include "Vector4.h"
 
+
+/*
+ * Class Matrix4f
+ *
+ * - Represents a matrix with row and column of length 4
+ * - Elements stored as rows
+ * - Column based matrix
+ * - Contains corresponding matrix operations
+ * - Implemented element access with proxy design pattern
+ *
+ */
 class Matrix4f
 {
 public:

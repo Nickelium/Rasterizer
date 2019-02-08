@@ -1,9 +1,7 @@
 #include "Engine.h"
 
-#include <SDL/SDL.h>
+#include "SDL2/include/SDL.h"
 #include <glad/glad.h>
-
-#include <cstdio>
 
 #include "Timer.h"
 #include "Scene.h"

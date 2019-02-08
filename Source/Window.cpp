@@ -1,7 +1,6 @@
 #include "Window.h"
 
-#include <SDL\SDL.h>
-#include <glad/glad.h>
+#include "SDL2/include/SDL.h"
 
 #include <cstdio>
 #include <string>

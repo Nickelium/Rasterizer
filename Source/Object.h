@@ -12,6 +12,13 @@ struct Material
 	float shininess = 32.0f;
 };
 
+/*
+ * Class Object
+ * 
+ * - Contains mesh object & textures
+ * - Has Transform properties
+ * - Has Material properties
+ */
 class Object 
 {
 public:

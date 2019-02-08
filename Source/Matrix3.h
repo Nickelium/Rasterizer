@@ -3,6 +3,16 @@
 #include "Vector3.h"
 #include "Vector2.h"
 
+/*
+ * Class Matrix3f
+ * 
+ * - Represents a matrix with row and column of length 3
+ * - Elements stored as rows
+ * - Column based matrix
+ * - Contains corresponding matrix operations
+ * - Implemented element access with proxy design pattern 
+ * 
+ */
 class Matrix3f
 {
 public:

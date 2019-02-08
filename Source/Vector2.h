@@ -9,6 +9,12 @@
 //struct Point2f;
 //Friend function cause a lot of trouble
 
+/*
+ * Template class Vec2
+ * 
+ * - Represent vector of size 2 
+ * - Provides typical math vector operations
+ */
 template <class T>
 struct Vec2
 {

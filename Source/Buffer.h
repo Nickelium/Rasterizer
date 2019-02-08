@@ -4,6 +4,13 @@
 #include <cassert>
 struct Color;
 
+/*
+ * Template Class Buffer
+ * 
+ * - Buffer class containing array of elements
+ * - Allow element access and setter
+ * - Will be used for buffer<int> as color buffer and buffer<float> as depth buffer 
+ */
 template <typename T>
 class Buffer
 {
@@ -15,7 +22,7 @@ public:
 		buffer(new T[width * height])
 	{}
 	~Buffer()
-	{ delete buffer; }
+	{ delete[] buffer; }
 
 	int GetWidth() const { return width; }
 	int GetHeight() const { return height; }

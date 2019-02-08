@@ -6,6 +6,13 @@
 
 //Friend function cause a lot of trouble
 
+
+/*
+ * Template class Vec3
+ *
+ * - Represent vector of size 3
+ * - Provides typical math vector operations
+ */
 template <class T>
 struct Vec3
 {

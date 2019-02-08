@@ -4,7 +4,11 @@
 
 #include <vector>
 
-
+/*
+ * Struct Triangle
+ * 
+ * - Contains vertices, uvs and normals of this triangle
+ */
 struct Triangle
 {
 public:

@@ -6,6 +6,10 @@
 #include "Matrix3.h"
 #include "Matrix4.h"
 
+/*
+ * Utility class, mostly utility math function
+ */
+
 #define PI 3.14159265359f
 
 namespace Maths

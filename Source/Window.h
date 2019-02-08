@@ -1,10 +1,17 @@
 #pragma once
-#include <SDL/SDL.h>
+#include "SDL2/include/SDL.h"
 #include "Buffer.h"
 
 struct SDL_Window;
 struct SDL_Texture;
 
+/*
+ * Class Window
+ * 
+ * - Contains with, height etc ..
+ * - Contains sdl window handle
+ * - Abstract sdl functionality away
+ */
 class Window
 {
 public:

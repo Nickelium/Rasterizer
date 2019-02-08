@@ -3,12 +3,17 @@
 #include "Window.h"
 #include "Renderer.h"
 #include "Timer.h"
-#include "ObjectFactory.h"
 #include "InputHandler.h"
 #include "SceneHandler.h"
 
 class Camera;
 
+/*
+ * Class Engine
+ * 
+ * - Main class binds the subcomponents together
+ * - Defer task to subcomponents
+ */
 class Engine
 {
 public:

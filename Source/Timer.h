@@ -2,6 +2,12 @@
 
 #include <ctime>
 
+/*
+ * Class Timer
+ * 
+ * - Class tracking time related metrics
+ * - ms, fps, total time etc...
+ */
 class Timer
 {
 public:

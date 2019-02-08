@@ -7,6 +7,13 @@ class Object;
 struct Color;
 struct Triangle;
 
+/*
+ * Abstract class IShader
+ * 
+ * - Derived class of IShader needs to implement VertexShader and FragmentShader (and more)
+ * - (was at first intended as interface rather abstract)
+ */
+
 class IShader
 {
 public:

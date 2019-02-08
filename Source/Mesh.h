@@ -5,6 +5,14 @@
 #include "Vector3.h"
 #include "Triangle.h"
 
+/*
+ * Class Mesh
+ * 
+ * - Class representing a mesh
+ * - Contains vertices, normals, texture coordinates and faces
+ * - Is currently resposible to parse obj files 
+ * TODO: Remove parsing file depedency to other class
+ */
 class Mesh
 {
 public:

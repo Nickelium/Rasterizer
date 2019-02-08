@@ -1,9 +1,7 @@
-
-#include <SDL\SDL.h>
+#include "SDL2/include/SDL.h"
 #include <Windows.h>
 
 #include "Engine.h"
-#include <iostream>
 
 //Alternatively: Linker/Input/AdditionalDepdencies/..lib
 #pragma comment(lib, "sdl2.lib")

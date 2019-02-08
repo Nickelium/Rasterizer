@@ -3,6 +3,12 @@
 #include "Maths.h"
 #include "Transform.h"
 
+/*
+ * Class Camera
+ * 
+ * - Holds transform data
+ * - Contains view matrix
+ */
 class Camera
 {
 public:

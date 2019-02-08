@@ -1,5 +1,5 @@
 ﻿#include "InputHandler.h"
-#include <SDL/SDL.h>
+#include "SDL2/include/SDL.h"
 
 InputHandler::InputHandler(SceneHandler* sceneHandler, Renderer* renderer)
 	:requestClose{ false },

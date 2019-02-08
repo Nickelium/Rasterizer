@@ -7,6 +7,13 @@
 
 //Friend function cause a lot of trouble
 
+
+/*
+ * Template class Vec4
+ *
+ * - Represent vector of size 4
+ * - Provides typical math vector operations
+ */
 template <class T>
 struct Vec4
 {

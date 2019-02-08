@@ -2,6 +2,11 @@
 
 #include "Maths.h"
 
+/*
+ * Struct Transform
+ * 
+ * - Contains transform properties : position, rotation and scale
+ */
 struct Transform
 {
 public:

@@ -2,6 +2,12 @@
 #include "SceneHandler.h"
 #include "Renderer.h"
 
+/*
+ * Class InputHandler
+ * 
+ * - Handle input
+ * - Defer tasks
+ */
 class InputHandler
 {
 public:

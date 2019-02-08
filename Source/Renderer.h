@@ -16,6 +16,14 @@ class Texture;
 class Camera;
 class IShader;
 
+
+/*
+ * Class Renderer
+ * 
+ * - Renderer class will render given a Scene Object
+ * - Defer to VertexShader and FragmentShader from the current active Shader
+ * - Perform Rasterization (currently bounding box)
+ */
 class Renderer
 {
 public:

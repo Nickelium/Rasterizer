@@ -5,6 +5,12 @@
 
 #include "Color.h"
 
+/*
+ * Class Texture
+ * 
+ * - Provides access to individual texture element
+ * - Uses stbi to load images
+ */
 class Texture
 {
 public:

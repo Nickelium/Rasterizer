@@ -27,51 +27,52 @@ Scene* SceneHandler::GetActiveScene() const
 
 void SceneHandler::BuilScenes()
 {
-	Scene* sc = new Scene;
-	sc->AddObject(factory.CreateTriangle());
-	scenes.push_back(sc);
+	scenes = parser.Parse("Resources/config.json");
+	//Scene* sc = new Scene;
+	//sc->AddObject(factory.CreateTriangle());
+	//scenes.push_back(sc);
 
-	sc = new Scene;
-	sc->AddObject(factory.CreateCube());
-	scenes.push_back(sc);
+	//sc = new Scene;
+	//sc->AddObject(factory.CreateCube());
+	//scenes.push_back(sc);
 
-	sc = new Scene;
-	sc->AddObject(factory.CreateTeapot());
-	scenes.push_back(sc);
+	//sc = new Scene;
+	//sc->AddObject(factory.CreateTeapot());
+	//scenes.push_back(sc);
 
-	sc = new Scene;
-	sc->AddObject(factory.CreateSuzanne());
-	scenes.push_back(sc);
+	//sc = new Scene;
+	//sc->AddObject(factory.CreateSuzanne());
+	//scenes.push_back(sc);
 
-	sc = new Scene;
-	sc->AddObject(factory.CreateAfrican());
-	sc->AddObject(factory.CreateEyesInner());
-	sc->AddObject(factory.CreateEyesOuter());
-	scenes.push_back(sc);
+	//sc = new Scene;
+	//sc->AddObject(factory.CreateAfrican());
+	//sc->AddObject(factory.CreateEyesInner());
+	//sc->AddObject(factory.CreateEyesOuter());
+	//scenes.push_back(sc);
 
-	sc = new Scene;
-	sc->AddObject(factory.CreateDiablo());
-	scenes.push_back(sc);
+	//sc = new Scene;
+	//sc->AddObject(factory.CreateDiablo());
+	//scenes.push_back(sc);
 
-	sc = new Scene;
-	sc->AddObject(factory.CreateHelmet());
-	scenes.push_back(sc);
+	//sc = new Scene;
+	//sc->AddObject(factory.CreateHelmet());
+	//scenes.push_back(sc);
 
-	sc = new Scene;
-	sc->AddObject(factory.CreateIllidan());
-	scenes.push_back(sc);
+	//sc = new Scene;
+	//sc->AddObject(factory.CreateIllidan());
+	//scenes.push_back(sc);
 
-	sc = new Scene;
-	sc->AddObject(factory.CreateCar());
-	scenes.push_back(sc);
+	//sc = new Scene;
+	//sc->AddObject(factory.CreateCar());
+	//scenes.push_back(sc);
 
-	sc = new Scene;
-	sc->AddObject(factory.CreateGuitar());
-	scenes.push_back(sc);
+	//sc = new Scene;
+	//sc->AddObject(factory.CreateGuitar());
+	//scenes.push_back(sc);
 
-	sc = new Scene;
-	sc->AddObject(factory.CreateWeapon());
-	scenes.push_back(sc);
+	//sc = new Scene;
+	//sc->AddObject(factory.CreateWeapon());
+	//scenes.push_back(sc);
 }
 
 void SceneHandler::ChangeScene(bool incrOrder)

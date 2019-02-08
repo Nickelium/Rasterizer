@@ -3,6 +3,12 @@
 #include "Object.h"
 #include "Camera.h"
 
+/*
+ * Class Scene
+ * 
+ * - Contains all objects in the scene
+ * - Contains a camera
+ */
 class Scene
 {
 public:

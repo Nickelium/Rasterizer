@@ -1,7 +1,6 @@
 #include "Renderer.h"
 
-#include <SDL\SDL.h>
-#include <cstdio>
+#include "SDL2/include/SDL.h"
 #include <algorithm>
 
 #include "Window.h"
