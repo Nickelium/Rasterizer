@@ -25,7 +25,7 @@ Color Texture::GetColor(float u, float v) const
 	int x = int(std::round(u * (width - 1)));
 	int y = height - 1 - int (std::round(v * (height - 1)));
 	float invMaxValue = 1.0f / 255.0f;
-	return Color(
+ 	return Color(
 		invMaxValue * image[(x + y * width) * comp + 0],
 		invMaxValue * image[(x + y * width) * comp + 1],
 		invMaxValue * image[(x + y * width) * comp + 2]);

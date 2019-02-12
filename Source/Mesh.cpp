@@ -35,6 +35,10 @@ void Mesh::ParseFile(const char* fileName)
 			std::stringstream ss(line.substr(3));
 			float u, v;
 			ss >> u >> v;
+			if(u != 1.0f)
+				u -= int(u);
+			if (v != 1.0f)
+				v -= int(v);
 			texCoords.emplace_back(u, v);
 		}
 		else if (line.substr(0, 3) == "vn ")

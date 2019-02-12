@@ -51,6 +51,7 @@ std::vector<Scene*> SceneParser::Parse(const std::string& file)
 				Vector3f(rotation[0], rotation[1], rotation[2]),
 				Vector3f(scale[0], scale[1], scale[2])
 			));
+			
 			scene->AddObject(std::move(object));
 		}
 		scenes.push_back(scene);

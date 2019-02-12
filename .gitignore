@@ -1,6 +1,9 @@
 
 # Created by https://www.gitignore.io/api/c++,visualstudio
 
+!Resources/
+!Depedencies/
+
 ### C++ ###
 # Prerequisites
 *.d

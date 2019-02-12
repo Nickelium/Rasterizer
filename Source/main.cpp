@@ -1,11 +1,13 @@
 #include "SDL2/include/SDL.h"
 #include <Windows.h>
+#include <fstream>
 
 #include "Engine.h"
 
 //Alternatively: Linker/Input/AdditionalDepdencies/..lib
-#pragma comment(lib, "sdl2.lib")
-#pragma comment(lib, "SDL2main.lib")
+#pragma comment(lib, "SDL2/lib/x86/SDL2.lib")
+#pragma comment(lib, "SDL2/lib/x86/SDL2main.lib")
+#pragma comment(lib, "SDL2/lib/x86/SDL2test.lib")
 
 void StartHeapControl();
 

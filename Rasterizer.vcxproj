@@ -70,8 +70,20 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <IncludePath>$(solutionDir)Dependencies\;$(IncludePath)</IncludePath>
-    <LibraryPath>$(solutionDir)Dependencies\SDL2\lib\x86\;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(solutionDir)Dependencies;$(IncludePath)</IncludePath>
+    <LibraryPath>$(solutionDir)Dependencies;$(LibraryPath)</LibraryPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <IncludePath>$(solutionDir)Dependencies;$(IncludePath)</IncludePath>
+    <LibraryPath>$(solutionDir)Dependencies;$(LibraryPath)</LibraryPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <IncludePath>$(solutionDir)Dependencies;$(IncludePath)</IncludePath>
+    <LibraryPath>$(solutionDir)Dependencies;$(LibraryPath)</LibraryPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <IncludePath>$(solutionDir)Dependencies;$(IncludePath)</IncludePath>
+    <LibraryPath>$(solutionDir)Dependencies;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>

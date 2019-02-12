@@ -1,290 +1,256 @@
 {
-	"scene_triangle":
-	{
-	  "object_triangle":
-	  {
-		  "model": "Triangle/triangle.obj",
-		  "diffusemap": "Triangle/checker.jpg",
-		  "material":
-		  {
-			"ambient": [0.75, 0.75, 0.75],
-			"diffuse": [0.75, 0.75, 0.75],
-			"specular": [1.0, 1.0, 1.0],
-			"exponent": 10.0
-		  },
-		  "transform":
-		  {
-			"position": [0.0, -0.1, -4.0],
-			"rotation": [0.0, 0.0, 45.0],
-			"scale": [1.0, 1.0, 1.0]
-		  }
-	  }
-	},
-	
-	
-	"scene_cube":
-	{
-	  "object_cube":
-	  {
-		  "model": "Cube/cube.obj",
-		  "diffusemap": "Cube/container.jpg",
-		  "material":
-		  {
-			"ambient": [0.75, 0.75, 0.75],
-			"diffuse": [0.75, 0.75, 0.75],
-			"specular": [0.7, 0.7, 0.7],
-			"exponent": 22.0
-		  },
-		  "transform":
-		  {
-			"position": [0.0, -0.1, -4.0],
-			"rotation": [0.0, 0.0, 0.0],
-			"scale": [1.0, 1.0, 1.0]
-		  }
-	  }
-	},
-	
-	
-	"scene_teapot":
-	{
-	  "object_teapot":
-	  {
-		  "model": "Utah/teapot.obj",
-		  "diffusemap": "Utah/wood.jpg",
-		  "material":
-		  {
-			"ambient": [0.75, 0.75, 0.75],
-			"diffuse": [0.75, 0.75, 0.75],
-			"specular": [1.0, 1.0, 1.0],
-			"exponent": 50.0
-		  },
-		  "transform":
-		  {
-			"position": [0.0, -0.5, -3.5],
-			"rotation": [0.0, 0.0, 0.0],
-			"scale": [1.0, 1.0, 1.0]
-		  }
-	  }
-	},
-	
-	
-	"scene_suzanne":
-	{
-	  "object_suzanne":
-	  {
-		  "model": "Suzanne/suzanne.obj",
-		  "diffusemap": "Suzanne/clay.jpg",
-		  "material":
-		  {
-			"ambient": [0.75, 0.75, 0.75],
-			"diffuse": [0.75, 0.75, 0.75],
-			"specular": [0.25, 0.25, 0.25],
-			"exponent": 50.0
-		  },
-		  "transform":
-		  {
-			"position": [0.0, -0.25, -4.5],
-			"rotation": [0.0, 0.0, 0.0],
-			"scale": [0.85, 0.85, 0.85]
-		  }
-	  }
-	},
-	
-	
-	"scene_african":
-	{
-	  "object_african":
-	  {
-		  "model": "African/african_head.obj",
-		  "diffusemap": "African/african_head_diffuse.tga",
-		  "material":
-		  {
-			"ambient": [0.75, 0.75, 0.75],
-			"diffuse": [0.75, 0.75, 0.75],
-			"specular": [0.1, 0.1, 0.1],
-			"exponent": 32.0
-		  },
-		  "transform":
-		  {
-			"position": [0.0, -0.15, -3.75],
-			"rotation": [0.0, 0.0, 0.0],
-			"scale": [1.0, 1.0, 1.0]
-		  }
-	  },
-	  "object_eyesinner":
-	  {
-		  "model": "African/african_head_eye_inner.obj",
-		  "diffusemap": "African/african_head_eye_inner_diffuse.tga",
-		  "material":
-		  {
-			"ambient": [0.75, 0.75, 0.75],
-			"diffuse": [0.75, 0.75, 0.75],
-			"specular": [0.1, 0.1, 0.1],
-			"exponent": 32.0
-		  },
-		  "transform":
-		  {
-			"position": [0.0, -0.15, -3.75],
-			"rotation": [0.0, 0.0, 0.0],
-			"scale": [1.0, 1.0, 1.0]
-		  }
-	  },
-	  "object_eyesouter":
-	  {
-		  "model": "African/african_head_eye_outer.obj",
-		  "diffusemap": "African/african_head_eye_outer_diffuse.tga",
-		  "material":
-		  {
-			"ambient": [0.75, 0.75, 0.75],
-			"diffuse": [0.75, 0.75, 0.75],
-			"specular": [0.1, 0.1, 0.1],
-			"exponent": 32.0
-		  },
-		  "transform":
-		  {
-			"position": [0.0, -0.15, -3.75],
-			"rotation": [0.0, 0.0, 0.0],
-			"scale": [1.0, 1.0, 1.0]
-		  }
-	  }
-	},
-	
-	
-	"scene_diablo":
-	{
-	  "object_diablo":
-	  {
-		  "model": "Diablo/diablo3.obj",
-		  "diffusemap": "Diablo/diablo3_pose_diffuse.tga",
-		  "material":
-		  {
-			"ambient": [0.75, 0.75, 0.75],
-			"diffuse": [0.75, 0.75, 0.75],
-			"specular": [0.15, 0.15, 0.15],
-			"exponent": 30.0
-		  },
-		  "transform":
-		  {
-			"position": [0.0, -0.15, -3.75],
-			"rotation": [0.0, 0.0, 0.0],
-			"scale": [1.0, 1.0, 1.0]
-		  }
-	  }
-	},
-	
-	
-	"scene_helmet":
-	{
-	  "object_helmet":
-	  {
-		  "model": "Helmet/helmet.obj",
-		  "diffusemap": "Helmet/helmet_diffuse.png",
-		  "material":
-		  {
-			"ambient": [0.75, 0.75, 0.75],
-			"diffuse": [1.0, 1.0, 1.0],
-			"specular": [0.25, 0.75, 0.75],
-			"exponent": 34.0
-		  },
-		  "transform":
-		  {
-			"position": [0.0, -0.0, -4.5],
-			"rotation": [0.0, 0.0, 0.0],
-			"scale": [0.8, 0.8, 0.8]
-		  }
-	  }
-	},
-	
-	
-	"scene_illidan":
-	{
-	  "object_illidan":
-	  {
-		  "model": "Illidan/illidan.obj",
-		  "diffusemap": "Illidan/illidan_diffuse.jpg",
-		  "material":
-		  {
-			"ambient": [0.75, 0.75, 0.75],
-			"diffuse": [0.75, 0.75, 0.75],
-			"specular": [0.25, 0.25, 0.25],
-			"exponent": 12.0
-		  },
-		  "transform":
-		  {
-			"position": [0.0, -0.25, -4.5],
-			"rotation": [0.0, 0.0, 0.0],
-			"scale": [1.0, 1.0, 1.0]
-		  }
-	  }
-	},
-	
-	
-	"scene_car":
-	{
-	  "object_car":
-	  {
-		  "model": "Car/car.obj",
-		  "diffusemap": "Car/skylineColor.png",
-		  "material":
-		  {
-			"ambient": [0.95, 0.95, 0.95],
-			"diffuse": [0.75, 0.75, 0.75],
-			"specular": [0.4, 0.4, 0.4],
-			"exponent": 3.0
-		  },
-		  "transform":
-		  {
-			"position": [0.0, -0.35, -5.0],
-			"rotation": [0.0, 0.0, 0.0],
-			"scale": [1.0, 1.0, 1.0]
-		  }
-	  }
-	},
-	
-	
-	"scene_guitar":
-	{
-	  "object_guitar":
-	  {
-		  "model": "Guitar/guitar.obj",
-		  "diffusemap": "Guitar/guitar_diffuse.png",
-		  "material":
-		  {
-			"ambient": [0.75, 0.75, 0.75],
-			"diffuse": [0.75, 0.75, 0.75],
-			"specular": [0.8, 0.75, 0.75],
-			"exponent": 32.0
-		  },
-		  "transform":
-		  {
-			"position": [0.0, -0.25, -4.5],
-			"rotation": [0.0, 0.0, 0.0],
-			"scale": [1.75, 1.75, 1.75]
-		  }
-	  }
-	},
-	
-	
-	
-	"scene_cerberus":
-	{
-	  "object_cerberus":
-	  {
-		  "model": "Cerberus/cerberus_mesh.obj",
-		  "diffusemap": "Cerberus/cerberus_albedo.png",
-		  "material":
-		  {
-			"ambient": [1.0, 1.0, 1.0],
-			"diffuse": [0.75, 0.75, 0.75],
-			"specular": [1.0, 0.984, 0.96],
-			"exponent": 30.0
-		  },
-		  "transform":
-		  {
-			"position": [0.0, -0.0, -3.5],
-			"rotation": [0.0, 0.0, 0.0],
-			"scale": [1.0, 1.0, 1.0]
-		  }
-	  }
-	}
+  "scene_triangle": {
+    "object_triangle": {
+      "model": "Triangle/triangle.obj",
+      "diffusemap": "Triangle/checker.jpg",
+      "material": {
+        "ambient": [ 0.75, 0.75, 0.75 ],
+        "diffuse": [ 0.75, 0.75, 0.75 ],
+        "specular": [ 1.0, 1.0, 1.0 ],
+        "exponent": 10.0
+      },
+      "transform": {
+        "position": [ 0.0, -0.1, -4.0 ],
+        "rotation": [ 0.0, 0.0, 45.0 ],
+        "scale": [ 1.0, 1.0, 1.0 ]
+      }
+    }
+  },
+
+
+  "scene_cube": {
+    "object_cube": {
+      "model": "Cube/cube.obj",
+      "diffusemap": "Cube/container.jpg",
+      "material": {
+        "ambient": [ 0.75, 0.75, 0.75 ],
+        "diffuse": [ 0.75, 0.75, 0.75 ],
+        "specular": [ 0.7, 0.7, 0.7 ],
+        "exponent": 22.0
+      },
+      "transform": {
+        "position": [ 0.0, -0.1, -4.0 ],
+        "rotation": [ 0.0, 0.0, 0.0 ],
+        "scale": [ 1.0, 1.0, 1.0 ]
+      }
+    }
+  },
+
+
+  "scene_teapot": {
+    "object_teapot": {
+      "model": "Utah/teapot.obj",
+      "diffusemap": "Utah/wood.jpg",
+      "material": {
+        "ambient": [ 0.75, 0.75, 0.75 ],
+        "diffuse": [ 0.75, 0.75, 0.75 ],
+        "specular": [ 1.0, 1.0, 1.0 ],
+        "exponent": 50.0
+      },
+      "transform": {
+        "position": [ 0.0, 0.0, -3.5 ],
+        "rotation": [ 0.0, 0.0, 0.0 ],
+        "scale": [ 1.0, 1.0, 1.0 ]
+      }
+    }
+  },
+
+
+  "scene_suzanne": {
+    "object_suzanne": {
+      "model": "Suzanne/suzanne.obj",
+      "diffusemap": "Suzanne/clay.jpg",
+      "material": {
+        "ambient": [ 0.75, 0.75, 0.75 ],
+        "diffuse": [ 0.75, 0.75, 0.75 ],
+        "specular": [ 0.25, 0.25, 0.25 ],
+        "exponent": 50.0
+      },
+      "transform": {
+        "position": [ 0.0, -0.25, -4.5 ],
+        "rotation": [ 0.0, 0.0, 0.0 ],
+        "scale": [ 0.85, 0.85, 0.85 ]
+      }
+    }
+  },
+
+
+  "scene_african": {
+    "object_african": {
+      "model": "African/african_head.obj",
+      "diffusemap": "African/african_head_diffuse.tga",
+      "material": {
+        "ambient": [ 0.75, 0.75, 0.75 ],
+        "diffuse": [ 0.75, 0.75, 0.75 ],
+        "specular": [ 0.1, 0.1, 0.1 ],
+        "exponent": 32.0
+      },
+      "transform": {
+        "position": [ 0.0, -0.15, -3.75 ],
+        "rotation": [ 0.0, 0.0, 0.0 ],
+        "scale": [ 1.0, 1.0, 1.0 ]
+      }
+    },
+    "object_eyesinner": {
+      "model": "African/african_head_eye_inner.obj",
+      "diffusemap": "African/african_head_eye_inner_diffuse.tga",
+      "material": {
+        "ambient": [ 0.75, 0.75, 0.75 ],
+        "diffuse": [ 0.75, 0.75, 0.75 ],
+        "specular": [ 0.1, 0.1, 0.1 ],
+        "exponent": 32.0
+      },
+      "transform": {
+        "position": [ 0.0, -0.15, -3.75 ],
+        "rotation": [ 0.0, 0.0, 0.0 ],
+        "scale": [ 1.0, 1.0, 1.0 ]
+      }
+    },
+    "object_eyesouter": {
+      "model": "African/african_head_eye_outer.obj",
+      "diffusemap": "African/african_head_eye_outer_diffuse.tga",
+      "material": {
+        "ambient": [ 0.75, 0.75, 0.75 ],
+        "diffuse": [ 0.75, 0.75, 0.75 ],
+        "specular": [ 0.1, 0.1, 0.1 ],
+        "exponent": 32.0
+      },
+      "transform": {
+        "position": [ 0.0, -0.15, -3.75 ],
+        "rotation": [ 0.0, 0.0, 0.0 ],
+        "scale": [ 1.0, 1.0, 1.0 ]
+      }
+    }
+  },
+
+
+  "scene_diablo": {
+    "object_diablo": {
+      "model": "Diablo/diablo3_pose.obj",
+      "diffusemap": "Diablo/diablo3_pose_diffuse.tga",
+      "material": {
+        "ambient": [ 0.75, 0.75, 0.75 ],
+        "diffuse": [ 0.75, 0.75, 0.75 ],
+        "specular": [ 0.15, 0.15, 0.15 ],
+        "exponent": 30.0
+      },
+      "transform": {
+        "position": [ 0.0, -0.15, -3.75 ],
+        "rotation": [ 0.0, 0.0, 0.0 ],
+        "scale": [ 1.0, 1.0, 1.0 ]
+      }
+    }
+  },
+
+
+  "scene_helmet": {
+    "object_helmet": {
+      "model": "Helmet/helmet.obj",
+      "diffusemap": "Helmet/helmet_diffuse.png",
+      "material": {
+        "ambient": [ 0.75, 0.75, 0.75 ],
+        "diffuse": [ 1.0, 1.0, 1.0 ],
+        "specular": [ 0.25, 0.75, 0.75 ],
+        "exponent": 34.0
+      },
+      "transform": {
+        "position": [ 0.0, -0.0, -4.5 ],
+        "rotation": [ 0.0, 0.0, 0.0 ],
+        "scale": [ 1.0, 1.0, 1.0 ]
+      }
+    }
+  },
+
+
+  "scene_illidan": {
+    "object_illidan": {
+      "model": "Illidan/illidan.obj",
+      "diffusemap": "Illidan/illidan_diffuse.jpg",
+      "material": {
+        "ambient": [ 0.75, 0.75, 0.75 ],
+        "diffuse": [ 0.75, 0.75, 0.75 ],
+        "specular": [ 0.25, 0.25, 0.25 ],
+        "exponent": 12.0
+      },
+      "transform": {
+        "position": [ 0.0, -0.25, -4.5 ],
+        "rotation": [ 0.0, 0.0, 0.0 ],
+        "scale": [ 1.0, 1.0, 1.0 ]
+      }
+    }
+  },
+
+
+  "scene_car": {
+    "object_car": {
+      "model": "Car/car.obj",
+      "diffusemap": "Car/skylineColor.png",
+      "material": {
+        "ambient": [ 0.95, 0.95, 0.95 ],
+        "diffuse": [ 0.75, 0.75, 0.75 ],
+        "specular": [ 0.4, 0.4, 0.4 ],
+        "exponent": 3.0
+      },
+      "transform": {
+        "position": [ 0.0, -0.35, -5.0 ],
+        "rotation": [ 0.0, 0.0, 0.0 ],
+        "scale": [ 1.0, 1.0, 1.0 ]
+      }
+    }
+  },
+
+
+  "scene_guitar": {
+    "object_guitar": {
+      "model": "Guitar/guitar.obj",
+      "diffusemap": "Guitar/guitar_diffuse.png",
+      "material": {
+        "ambient": [ 0.75, 0.75, 0.75 ],
+        "diffuse": [ 0.75, 0.75, 0.75 ],
+        "specular": [ 0.8, 0.75, 0.75 ],
+        "exponent": 32.0
+      },
+      "transform": {
+        "position": [ 0.0, -0.25, -4.5 ],
+        "rotation": [ 0.0, 0.0, 0.0 ],
+        "scale": [ 1.75, 1.75, 1.75 ]
+      }
+    }
+  },
+
+  "scene_weapon": {
+    "object_weapon": {
+      "model": "Weapon/weapon.obj",
+      "diffusemap": "Weapon/weapon_diffuse.jpg",
+      "material": {
+        "ambient": [ 1.0, 1.0, 1.0 ],
+        "diffuse": [ 0.75, 0.75, 0.75 ],
+        "specular": [ 1.0, 0.984, 0.96 ],
+        "exponent": 30.0
+      },
+      "transform": {
+        "position": [ 0.0, -0.0, -3.5 ],
+        "rotation": [ 0.0, 0.0, 0.0 ],
+        "scale": [ 1.0, 1.0, 1.0 ]
+      }
+    }
+  },
+
+  "scene_cerberus": {
+    "object_cerberus": {
+      "model": "Cerberus/cerberus_mesh.obj",
+      "diffusemap": "Cerberus/cerberus_albedo.png",
+      "material": {
+        "ambient": [ 1.0, 1.0, 1.0 ],
+        "diffuse": [ 0.75, 0.75, 0.75 ],
+        "specular": [ 1.0, 0.984, 0.96 ],
+        "exponent": 30.0
+      },
+      "transform": {
+        "position": [ 0.0, -0.0, -4.5 ],
+        "rotation": [ 0.0, 0.0, 0.0 ],
+        "scale": [ 1.0, 1.0, 1.0 ]
+      }
+    }
+  }
 }
