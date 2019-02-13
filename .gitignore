@@ -1,8 +1,9 @@
 
 # Created by https://www.gitignore.io/api/c++,visualstudio
 
-!Resources/
-!Depedencies/
+!/Resources
+!/Dependencies
+
 
 ### C++ ###
 # Prerequisites
@@ -12,7 +13,6 @@
 *.slo
 *.lo
 *.o
-*.obj
 
 # Precompiled Headers
 *.gch
