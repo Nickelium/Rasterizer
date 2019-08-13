@@ -96,6 +96,7 @@ https://www.youtube.com/watch?v=7sPPdtgjI90
 * [Scratch A Pixel](https://www.scratchapixel.com/)
 * [Tiny Renderer](https://github.com/ssloy/tinyrenderer/wiki)
 * [Leanrn OpenGL](https://learnopengl.com/)
+* [Mathematics for 3D Game Programming and Computer Graphics, Eric Lengyel](http://mathfor3dgameprogramming.com/)
 
 ## Reference Models and Textures
 * Utah Teapot, The University of Utah
